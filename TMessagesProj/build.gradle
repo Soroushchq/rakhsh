@@ -142,6 +142,14 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 36
+        // [FORK] Telegram api_id/api_hash from root local.properties (never committed)
+        def forkProps = new Properties()
+        def forkPropsFile = rootProject.file('local.properties')
+        if (forkPropsFile.exists()) {
+            forkPropsFile.withInputStream { forkProps.load(it) }
+        }
+        buildConfigField 'int', 'TELEGRAM_APP_ID', (forkProps.getProperty('TELEGRAM_APP_ID') ?: '1')
+        buildConfigField 'String', 'TELEGRAM_APP_HASH', "\"${forkProps.getProperty('TELEGRAM_APP_HASH') ?: ''}\""
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 

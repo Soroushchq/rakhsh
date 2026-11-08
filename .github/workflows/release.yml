@@ -1,0 +1,78 @@
+# android-release.yml — signed release APK + GitHub Release for Rakhsh
+# Triggers on tag push (v*) or manual dispatch.
+# Secrets required (set via repo Settings/Actions secrets):
+#   RAKHSH_KEYSTORE_BASE64  – base64 of the release keystore (never committed to git)
+#   RAKHSH_STORE_PASSWORD   – keystore store password
+#   RAKHSH_KEY_ALIAS        – key alias
+#   RAKHSH_KEY_PASSWORD     – key password
+# NOTE (alpha): api_id is a stub; end-user login requires the project's own api_id
+# (see docs/BUILD.md §4). Packaged value can be switched to a secret later.
+
+name: android-release
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  signed-release:
+    name: assembleAfatRelease + GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - name: Checkout (recursive submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle (caching)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Restore signing keystore from secret (not committed to git)
+        run: |
+          echo "${{ secrets.RAKHSH_KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
+
+      - name: Inject stub api_id
+        run: |
+          {
+            echo "TELEGRAM_APP_ID=1"
+            echo "TELEGRAM_APP_HASH="
+          } >> local.properties
+
+      - name: Build signed universal release APK
+        run: |
+          ./gradlew :TMessagesProj_App:assembleAfatRelease \
+            -PRELEASE_STORE_PASSWORD="${{ secrets.RAKHSH_STORE_PASSWORD }}" \
+            -PRELEASE_KEY_ALIAS="${{ secrets.RAKHSH_KEY_ALIAS }}" \
+            -PRELEASE_KEY_PASSWORD="${{ secrets.RAKHSH_KEY_PASSWORD }}" \
+            --stacktrace
+
+      - name: Stage release files
+        run: |
+          mkdir -p dist
+          cp TMessagesProj_App/build/outputs/apk/afat/release/app.apk "dist/Rakhsh-${GITHUB_REF_NAME}-universal.apk"
+          sha256sum dist/*.apk > dist/SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Rakhsh $GITHUB_REF_NAME" \
+            --prerelease \
+            --notes "Unofficial GPLv2 client based on the Telegram open-source code (Android).
+          - Signed universal APK (afat flavor, all ABIs). SHA-256 checksums included.
+          - ALPHA: packaged with a stub api_id — end-user login requires the project's own api_id (docs/BUILD.md §4).
+          - Source for this build: this repository at tag $GITHUB_REF_NAME (GPLv2). Not affiliated with Telegram Messenger Inc." \
+            dist/*

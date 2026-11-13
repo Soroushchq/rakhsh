@@ -1,12 +1,12 @@
-# android-release.yml — signed release APK + GitHub Release for Amber
+# android-release.yml — signed release APK + GitHub Release for AmberGram
 # Triggers on tag push (v*) or manual dispatch.
 # Secrets required (set via repo Settings/Actions secrets):
 #   RAKHSH_KEYSTORE_BASE64  – base64 of the release keystore (never committed to git)
 #   RAKHSH_STORE_PASSWORD   – keystore store password
 #   RAKHSH_KEY_ALIAS        – key alias
 #   RAKHSH_KEY_PASSWORD     – key password
-# NOTE (alpha): api_id is a stub; end-user login requires the project's own api_id
-# (see docs/BUILD.md §4). Packaged value can be switched to a secret later.
+#   RAKHSH_TELEGRAM_APP_ID / RAKHSH_TELEGRAM_APP_HASH – packaged into the APK so
+#   end-user login works out of the box.
 
 name: android-release
 
@@ -71,7 +71,7 @@ jobs:
       - name: Stage release files
         run: |
           mkdir -p dist
-          cp TMessagesProj_App/build/outputs/apk/afat/release/app.apk "dist/Amber-${GITHUB_REF_NAME}-universal.apk"
+          cp TMessagesProj_App/build/outputs/apk/afat/release/app.apk "dist/AmberGram-${GITHUB_REF_NAME}-universal.apk"
           sha256sum dist/*.apk > dist/SHA256SUMS.txt
 
       - name: Create GitHub Release
@@ -79,10 +79,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            --title "Amber $GITHUB_REF_NAME" \
+            --title "AmberGram $GITHUB_REF_NAME" \
             --prerelease \
             --notes "Unofficial GPLv2 client based on the Telegram open-source code (Android).
           - Signed universal APK (afat flavor, all ABIs). SHA-256 checksums included.
-          - ALPHA: packaged with a stub api_id — end-user login requires the project's own api_id (docs/BUILD.md §4).
+          - Packaged with the project's own api_id/api_hash — login works out of the box.
+          - AmberGram branding: OLED amber theme, fancy UI font, AmberGram Settings with the live sequential download queue, phoenix launcher icon.
           - Source for this build: this repository at tag $GITHUB_REF_NAME (GPLv2). Not affiliated with Telegram Messenger Inc." \
             dist/*

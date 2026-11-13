@@ -214,13 +214,7 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
         final QueueItem item = current;
         updateNotification(true);
         Utilities.globalQueue.postRunnable(() -> {
-            boolean ok;
-            try {
-                ok = copyToPublicDownloads(item, finalFile);
-            } catch (Throwable e) {
-                FileLog.e(e);
-                ok = false;
-            }
+            final boolean ok = copyToPublicDownloadsSafely(item, finalFile);
             AndroidUtilities.runOnUIThread(() -> {
                 if (current == item) {
                     item.state = ok ? STATE_DONE : STATE_FAILED;
@@ -230,6 +224,15 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
                 }
             });
         });
+    }
+
+    private boolean copyToPublicDownloadsSafely(QueueItem item, File finalFile) {
+        try {
+            return copyToPublicDownloads(item, finalFile);
+        } catch (Throwable e) {
+            FileLog.e(e);
+            return false;
+        }
     }
 
     /** Copies the downloaded file into public Downloads/Telegram and registers it with the system. */

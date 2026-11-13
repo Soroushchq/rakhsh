@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
 
 /**
  * Amber fork: foreground service (dataSync) that keeps the sequential

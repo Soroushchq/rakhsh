@@ -103,6 +103,7 @@ public class TextCheckCell extends FrameLayout {
 
         textView = new TextView(context);
         ThemeBind.textColor(textView, dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText, resourcesProvider);
+        textView.setTypeface(AndroidUtilities.bold());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setLines(1);
         textView.setMaxLines(1);

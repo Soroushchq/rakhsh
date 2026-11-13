@@ -316,6 +316,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             textView.setSingleLine(true);
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
+            textView.setTypeface(AndroidUtilities.bold());
             ThemeBind.textColor(textView, Theme.key_dialogTextBlack, resourcesProvider);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
@@ -933,6 +934,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             secondTitleTextView = new TextView(getContext());
             secondTitleTextView.setText(secondTitle);
             ThemeBind.textColor(secondTitleTextView, Theme.key_dialogTextGray3, themedColors);
+            secondTitleTextView.setTypeface(AndroidUtilities.bold());
             secondTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             secondTitleTextView.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP);
             titleContainer.addView(secondTitleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 0, 21, 0, 0));
@@ -942,6 +944,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             subtitleTextView = new TextView(getContext());
             subtitleTextView.setText(subtitle);
             ThemeBind.textColor(subtitleTextView, Theme.key_dialogIcon, themedColors);
+            subtitleTextView.setTypeface(AndroidUtilities.bold());
             subtitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             subtitleTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             containerView.addView(subtitleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, items != null ? 14 : 10));
@@ -982,6 +985,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
         messageTextView = new EffectsTextView(getContext());
         NotificationCenter.listenEmojiLoading(messageTextView);
         messageTextView.setTextColor(lastMessageTextColor = getThemedColor(topAnimationIsNew ? Theme.key_windowBackgroundWhiteGrayText : Theme.key_dialogTextBlack)); // re-applied in updateThemeColors unless customTextColor
+        messageTextView.setTypeface(AndroidUtilities.bold());
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         messageTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         ThemeBind.linkTextColor(messageTextView, Theme.key_dialogTextLink, themedColors);

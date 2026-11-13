@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="AmberQueueMenu">دانلود ترتیبی</string>
-    <string name="AmberQueueNotificationTitle">دانلود ترتیبی Amber</string>
+    <string name="AmberQueueNotificationTitle">دانلود ترتیبی AmberGram</string>
     <string name="AmberQueueAddedOne">۱ فایل به صف دانلود ترتیبی اضافه شد</string>
     <string name="AmberQueueAddedMany">%1$d فایل به صف دانلود ترتیبی اضافه شد</string>
     <string name="AmberQueueNoneFound">در انتخاب شما فایل قابل دانلودی نیست</string>
     <string name="AmberQueueCancelAll">لغو همه</string>
     <string name="AmberQueueProgressLine">%1$d از %2$d</string>
     <string name="AmberQueueAlreadyQueued">فایل‌های انتخابی از قبل در صف دانلود هستند</string>
+    <string name="AmbergramQueueSection">دانلودهای ترتیبی</string>
+    <string name="AmbergramQueueEmpty">صف خالی است. در یک گفتگو ویدیو یا فایل‌ها را انتخاب کنید، سپس از منوی سه‌نقطه گزینه «دانلود ترتیبی» را بزنید.</string>
+    <string name="AmbergramQueueStatePending">در انتظار</string>
+    <string name="AmbergramQueueStateDownloading">در حال دانلود</string>
+    <string name="AmbergramQueueStateDone">انجام شد</string>
+    <string name="AmbergramQueueStateFailed">ناموفق</string>
+    <string name="AmbergramQueueClearFinished">پاک‌سازی موارد تمام‌شده</string>
+    <string name="AmbergramQueueRemove">حذف</string>
+    <string name="AmbergramQueueRemoved">از صف دانلود حذف شد</string>
+    <string name="AmbergramQueueSummary">%1$s در انتظار • %2$s در حال دانلود</string>
+    <string name="AmbergramQueueComingSoon">قابلیت‌های بیشتری از AmberGram در راه است.</string>
 </resources>

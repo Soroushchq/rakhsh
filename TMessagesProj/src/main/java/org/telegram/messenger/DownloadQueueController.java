@@ -38,6 +38,11 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
     public static final int STATE_DONE = 2;
     public static final int STATE_FAILED = 3;
 
+    /** AmberGram: listener for UI (AmbergramSettingsActivity) to reflect queue changes live. */
+    public interface QueueListener {
+        void onQueueUpdated();
+    }
+
     private static volatile DownloadQueueController[] Instance = new DownloadQueueController[UserConfig.MAX_ACCOUNT_COUNT];
 
     public static DownloadQueueController getInstance(int num) {
@@ -78,6 +83,78 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
     private QueueItem current;
     private AmberDownloadService attachedService;
     private long lastNotifyTime;
+    private final ArrayList<QueueListener> queueListeners = new ArrayList<>();
+
+    public void addQueueListener(QueueListener listener) {
+        synchronized (queueListeners) {
+            if (!queueListeners.contains(listener)) {
+                queueListeners.add(listener);
+            }
+        }
+        listener.onQueueUpdated();
+    }
+
+    public void removeQueueListener(QueueListener listener) {
+        synchronized (queueListeners) {
+            queueListeners.remove(listener);
+        }
+    }
+
+    private void notifyQueueListeners() {
+        QueueListener[] local;
+        synchronized (queueListeners) {
+            local = queueListeners.toArray(new QueueListener[0]);
+        }
+        for (int a = 0; a < local.length; a++) {
+            try {
+                local[a].onQueueUpdated();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    /** Returns a copy of the queue including the currently downloading item (last). Must be called on the UI thread. */
+    public ArrayList<QueueItem> getQueueSnapshot() {
+        ArrayList<QueueItem> all = new ArrayList<>(queue);
+        if (current != null) {
+            all.add(current);
+        }
+        return all;
+    }
+
+    /** Removes a PENDING (waiting) item from the queue. Returns true if removed. */
+    public boolean cancelPendingItem(QueueItem item) {
+        boolean removed = false;
+        for (int a = queue.size() - 1; a >= 0; a--) {
+            QueueItem queued = queue.get(a);
+            if (queued.state == STATE_PENDING && queued.messageId == item.messageId && queued.dialogId == item.dialogId && queued.fileName.equals(item.fileName)) {
+                queue.remove(a);
+                removed = true;
+            }
+        }
+        if (removed) {
+            persist();
+            updateNotification(true);
+        }
+        return removed;
+    }
+
+    /** Removes all DONE/FAILED items from the queue. */
+    public void removeFinished() {
+        boolean removed = false;
+        for (int a = queue.size() - 1; a >= 0; a--) {
+            QueueItem item = queue.get(a);
+            if (item.state == STATE_DONE || item.state == STATE_FAILED) {
+                queue.remove(a);
+                removed = true;
+            }
+        }
+        if (removed) {
+            persist();
+            updateNotification(true);
+        }
+    }
 
     private DownloadQueueController(int account) {
         currentAccount = account;
@@ -346,6 +423,7 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
             if (current != null && current.fileName.equals(args[0])) {
                 current.loadedBytes = (Long) args[1];
                 updateNotification(false);
+                notifyQueueListeners();
             }
         } else if (id == NotificationCenter.fileLoaded) {
             if (current != null && current.fileName.equals(args[0])) {
@@ -391,6 +469,7 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
         } catch (Throwable e) {
             FileLog.e(e);
         }
+        notifyQueueListeners();
     }
 
     private void loadQueue() {

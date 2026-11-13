@@ -94,7 +94,7 @@ public class TextStyleSpan extends MetricAffectingSpan {
             } else if ((flags & FLAG_STYLE_BOLD) != 0 && (flags & FLAG_STYLE_ITALIC) != 0) {
                 return AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM_ITALIC);
             } else if ((flags & FLAG_STYLE_BOLD) != 0) {
-                return AndroidUtilities.bold();
+                return AndroidUtilities.messageBold();
             } else if ((flags & FLAG_STYLE_ITALIC) != 0) {
                 return AndroidUtilities.getTypeface("fonts/ritalic.ttf");
             } else {

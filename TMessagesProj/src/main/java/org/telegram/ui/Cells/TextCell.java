@@ -99,6 +99,7 @@ public class TextCell extends FrameLayout implements Theme.Colorable {
 
         textView = new SimpleTextView(context);
         ThemeBind.textColor(textView, dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText, resourcesProvider);
+        textView.setTypeface(AndroidUtilities.bold());
         textView.setTextSize(16);
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -106,6 +107,7 @@ public class TextCell extends FrameLayout implements Theme.Colorable {
 
         subtitleView = new SimpleTextView(context);
         ThemeBind.textColor(subtitleView, dialog ? Theme.key_dialogTextGray : Theme.key_windowBackgroundWhiteGrayText, resourcesProvider);
+        subtitleView.setTypeface(AndroidUtilities.bold());
         subtitleView.setTextSize(13);
         subtitleView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         subtitleView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -114,6 +116,7 @@ public class TextCell extends FrameLayout implements Theme.Colorable {
         valueTextView = new AnimatedTextView(context, false, true, true);
         ThemeBind.textColor(valueTextView, dialog ? Theme.key_dialogTextBlue2 : Theme.key_windowBackgroundWhiteValueText, resourcesProvider);
         valueTextView.setPadding(0, dp(18), 0, dp(18));
+        valueTextView.setTypeface(AndroidUtilities.bold());
         valueTextView.setTextSize(dp(16));
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT);
         valueTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -123,6 +126,7 @@ public class TextCell extends FrameLayout implements Theme.Colorable {
         valueSpoilersTextView = new SimpleTextView(context);
         valueSpoilersTextView.setEllipsizeByGradient(18, false);
         ThemeBind.textColor(valueSpoilersTextView, dialog ? Theme.key_dialogTextBlue2 : Theme.key_windowBackgroundWhiteValueText, resourcesProvider);
+        valueSpoilersTextView.setTypeface(AndroidUtilities.bold());
         valueSpoilersTextView.setGravity(LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT);
         valueSpoilersTextView.setTextSize(16);
         valueSpoilersTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);

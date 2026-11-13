@@ -80,6 +80,7 @@ public class TextInfoPrivacyCell extends FrameLayout implements Theme.Colorable 
             }
         };
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        textView.setTypeface(AndroidUtilities.bold());
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setPadding(0, AndroidUtilities.dp(10), 0, AndroidUtilities.dp(17));
         textView.setMovementMethod(LinkMovementMethod.getInstance());

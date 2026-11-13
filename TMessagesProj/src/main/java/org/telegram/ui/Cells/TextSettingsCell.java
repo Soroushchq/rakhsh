@@ -80,6 +80,7 @@ public class TextSettingsCell extends FrameLayout {
         this.padding = padding;
 
         textView = new TextView(context);
+        textView.setTypeface(AndroidUtilities.bold());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setLines(1);
         textView.setMaxLines(1);
@@ -91,6 +92,7 @@ public class TextSettingsCell extends FrameLayout {
 
         valueTextView = new AnimatedTextView(context, true, true, !LocaleController.isRTL);
         valueTextView.setAnimationProperties(.55f, 0, 320, CubicBezierInterpolator.EASE_OUT_QUINT);
+        valueTextView.setTypeface(AndroidUtilities.bold());
         valueTextView.setTextSize(AndroidUtilities.dp(16));
         valueTextView.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL);
         ThemeBind.textColor(valueTextView, Theme.key_windowBackgroundWhiteValueText, resourcesProvider);

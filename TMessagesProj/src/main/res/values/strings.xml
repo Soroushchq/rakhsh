@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">Amber</string>
+    <string name="AppName" translatable="false">AmberGram</string>
     <string name="AppNameBeta">Amber Beta</string>
     <string name="LanguageName">English</string>
     <string name="English">English</string>
@@ -11679,11 +11679,23 @@
     <string name="FpnvConsentMccMnc">MCC / MNC</string>
     <string name="FpnvConsentPhoneNumber">Phone Number</string>
     <string name="AmberQueueMenu">Sequential download</string>
-    <string name="AmberQueueNotificationTitle">Amber sequential downloads</string>
+    <string name="AmberQueueNotificationTitle">AmberGram sequential downloads</string>
     <string name="AmberQueueAddedOne">1 file added to the sequential download queue</string>
     <string name="AmberQueueAddedMany">%1$d files added to the sequential download queue</string>
     <string name="AmberQueueNoneFound">No downloadable files in the selection</string>
     <string name="AmberQueueCancelAll">Cancel all</string>
     <string name="AmberQueueProgressLine">%1$d of %2$d</string>
     <string name="AmberQueueAlreadyQueued">Selected files are already in the download queue</string>
+    <string name="AmbergramSettings" translatable="false">AmberGram Settings</string>
+    <string name="AmbergramQueueSection">Sequential Downloads</string>
+    <string name="AmbergramQueueEmpty">The queue is empty. Open a chat, long-press to select videos and files, then tap the three-dot menu and choose \"Sequential download\".</string>
+    <string name="AmbergramQueueStatePending">Waiting</string>
+    <string name="AmbergramQueueStateDownloading">Downloading</string>
+    <string name="AmbergramQueueStateDone">Done</string>
+    <string name="AmbergramQueueStateFailed">Failed</string>
+    <string name="AmbergramQueueClearFinished">Clear finished</string>
+    <string name="AmbergramQueueRemove">Remove</string>
+    <string name="AmbergramQueueRemoved">Removed from the queue</string>
+    <string name="AmbergramQueueSummary">%1$s waiting • %2$s downloading</string>
+    <string name="AmbergramQueueComingSoon">More AmberGram features are on the way.</string>
 </resources>

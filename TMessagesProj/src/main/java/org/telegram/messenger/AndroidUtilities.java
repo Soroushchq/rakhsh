@@ -255,20 +255,41 @@ public class AndroidUtilities {
     public final static String TYPEFACE_ROBOTO_MEDIUM_ITALIC = "fonts/rmediumitalic.ttf";
     public final static String TYPEFACE_ROBOTO_MONO = "fonts/rmono.ttf";
     public final static String TYPEFACE_MERRIWEATHER_BOLD = "fonts/mw_bold.ttf";
+    public final static String TYPEFACE_AMBERGRAM_UI = "fonts/ambergramui.ttf";
 
     public static Typeface mediumTypeface;
     public static ThreadLocal<byte[]> readBufferLocal = new ThreadLocal<>();
     public static ThreadLocal<byte[]> bufferLocal = new ThreadLocal<>();
 
+    /**
+     * AmberGram: the app-wide UI typeface. Bold and rounded, used for all
+     * Telegram-authored interface texts (headers, buttons, cells, menus).
+     * Message content keeps the original Roboto styling via messageBold().
+     */
     public static Typeface bold() {
         if (mediumTypeface == null) {
             if (SharedConfig.useSystemBoldFont && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 mediumTypeface = Typeface.create(null, 500, false);
             } else {
-                mediumTypeface = getTypeface(TYPEFACE_ROBOTO_MEDIUM);
+                mediumTypeface = getTypeface(TYPEFACE_AMBERGRAM_UI);
+                if (mediumTypeface == null) {
+                    mediumTypeface = getTypeface(TYPEFACE_ROBOTO_MEDIUM);
+                }
             }
         }
         return mediumTypeface;
+    }
+
+    /**
+     * AmberGram: the original Roboto Medium typeface, used for user-generated
+     * content styling (bold spans inside messages, captions) so chats are not
+     * affected by the custom UI font.
+     */
+    public static Typeface messageBold() {
+        if (SharedConfig.useSystemBoldFont && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return Typeface.create(null, 500, false);
+        }
+        return getTypeface(TYPEFACE_ROBOTO_MEDIUM);
     }
 
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
@@ -6461,7 +6482,7 @@ public class AndroidUtilities {
         return "";
     }
 
-	public static void quietSleep(long millis) {
+        public static void quietSleep(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException ignored) {

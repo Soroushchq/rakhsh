@@ -43,11 +43,21 @@ jobs:
         run: |
           echo "${{ secrets.RAKHSH_KEYSTORE_BASE64 }}" | base64 -d > TMessagesProj/config/release.keystore
 
-      - name: Inject stub api_id
+      - name: Inject api credentials (real secrets, stub fallback)
+        env:
+          APP_ID: ${{ secrets.RAKHSH_TELEGRAM_APP_ID }}
+          APP_HASH: ${{ secrets.RAKHSH_TELEGRAM_APP_HASH }}
         run: |
           {
-            echo "TELEGRAM_APP_ID=1"
-            echo "TELEGRAM_APP_HASH="
+            if [ -n "$APP_ID" ] && [ -n "$APP_HASH" ]; then
+              echo "TELEGRAM_APP_ID=$APP_ID"
+              echo "TELEGRAM_APP_HASH=$APP_HASH"
+              echo "Using REAL api credentials from repo secrets"
+            else
+              echo "TELEGRAM_APP_ID=1"
+              echo "TELEGRAM_APP_HASH="
+              echo "Stub api_id (compile-only, cannot log in)"
+            fi
           } >> local.properties
 
       - name: Build signed universal release APK

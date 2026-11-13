@@ -38,11 +38,21 @@ jobs:
       - name: Set up Gradle (caching)
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Inject CI stub api_id (build-only, cannot log in)
+      - name: Inject api credentials (real secrets, stub fallback)
+        env:
+          APP_ID: ${{ secrets.RAKHSH_TELEGRAM_APP_ID }}
+          APP_HASH: ${{ secrets.RAKHSH_TELEGRAM_APP_HASH }}
         run: |
           {
-            echo "TELEGRAM_APP_ID=1"
-            echo "TELEGRAM_APP_HASH="
+            if [ -n "$APP_ID" ] && [ -n "$APP_HASH" ]; then
+              echo "TELEGRAM_APP_ID=$APP_ID"
+              echo "TELEGRAM_APP_HASH=$APP_HASH"
+              echo "Using REAL api credentials from repo secrets"
+            else
+              echo "TELEGRAM_APP_ID=1"
+              echo "TELEGRAM_APP_HASH="
+              echo "Stub api_id (compile-only, cannot log in)"
+            fi
           } >> local.properties
 
       - name: Build debug APK

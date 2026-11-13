@@ -1,4 +1,4 @@
-# android-release.yml — signed release APK + GitHub Release for Rakhsh
+# android-release.yml — signed release APK + GitHub Release for Amber
 # Triggers on tag push (v*) or manual dispatch.
 # Secrets required (set via repo Settings/Actions secrets):
 #   RAKHSH_KEYSTORE_BASE64  – base64 of the release keystore (never committed to git)
@@ -71,7 +71,7 @@ jobs:
       - name: Stage release files
         run: |
           mkdir -p dist
-          cp TMessagesProj_App/build/outputs/apk/afat/release/app.apk "dist/Rakhsh-${GITHUB_REF_NAME}-universal.apk"
+          cp TMessagesProj_App/build/outputs/apk/afat/release/app.apk "dist/Amber-${GITHUB_REF_NAME}-universal.apk"
           sha256sum dist/*.apk > dist/SHA256SUMS.txt
 
       - name: Create GitHub Release
@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            --title "Rakhsh $GITHUB_REF_NAME" \
+            --title "Amber $GITHUB_REF_NAME" \
             --prerelease \
             --notes "Unofficial GPLv2 client based on the Telegram open-source code (Android).
           - Signed universal APK (afat flavor, all ABIs). SHA-256 checksums included.

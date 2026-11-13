@@ -1,4 +1,4 @@
-# COMPLIANCE.md — "[APP NAME]" (unofficial client based on the Telegram open-source code)
+# COMPLIANCE.md — "Amber" (unofficial client based on the Telegram open-source code)
 
 > **Status: v0.1 — compliance research baseline (pre-Milestone-1).**
 > The final, fully-checked version is due at Milestone 5. Items marked ☐ are verified only

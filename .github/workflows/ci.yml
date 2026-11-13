@@ -1,4 +1,4 @@
-# Android CI for the [APP NAME] fork (Milestone 1)
+# Android CI for the Amber fork (Milestone 1)
 # Copy this file to: .github/workflows/ci.yml
 #
 # - Builds :TMessagesProj_App:assembleDebug with STUB api keys (no secrets in CI).

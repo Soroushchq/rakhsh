@@ -1,4 +1,17 @@
-## Telegram messenger for Android
+# Amber
+
+**Amber** is an unofficial, open-source fork of [Telegram for Android](https://github.com/DrKLO/Telegram),
+maintained by [Soroushchq](https://github.com/Soroushchq) and licensed under **GPLv2**.
+It ships an OLED-black + amber UI and a sequential background download queue
+(select multiple files in a chat and let them download in order, even while the
+phone is locked).
+
+> Not affiliated with Telegram Messenger Inc. "Telegram" is a trademark of its
+> respective owner and is not used by this project's branding. See [NOTICE.md](NOTICE.md).
+
+---
+
+## Upstream readme (Telegram messenger for Android)
 
 [Telegram](https://telegram.org) is a messaging app with a focus on speed and security. It’s superfast, simple and free.
 This repo contains the official source code for [Telegram App for Android](https://play.google.com/store/apps/details?id=org.telegram.messenger).

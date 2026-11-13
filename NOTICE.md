@@ -1,6 +1,6 @@
 # NOTICE
 
-**Rakhsh** is an unofficial fork of [Telegram for Android](https://github.com/DrKLO/Telegram),
+**Amber** is an unofficial fork of [Telegram for Android](https://github.com/DrKLO/Telegram),
 licensed under the GNU General Public License v2. Changes made by this fork are documented
 in `docs/` (COMPLIANCE.md, PROGRESS.md).
 

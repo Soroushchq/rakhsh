@@ -239,6 +239,25 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
         return false;
     }
 
+    /**
+     * AmberGram: true when there is nothing actually in flight — no current download
+     * and no pending items. While idle the app must behave like regular Telegram:
+     * no foreground service, no ongoing notification, no battery drain.
+     */
+    public boolean isIdle() {
+        return current == null && !hasPendingItems();
+    }
+
+    private boolean hasPendingItems() {
+        for (int a = 0; a < queue.size(); a++) {
+            QueueItem item = queue.get(a);
+            if (item.state == STATE_PENDING || item.state == STATE_DOWNLOADING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void startNextIfNeeded() {
         if (current != null) {
             updateNotification(true);
@@ -392,6 +411,12 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
     private void updateNotification(boolean force) {
         AmberDownloadService service = attachedService;
         if (service == null) {
+            return;
+        }
+        if (isIdle()) {
+            // AmberGram: queue drained (or empty) — never post a progress notification.
+            // The service is being stopped; its onDestroy() cancels the notification,
+            // so nothing lingers in the shade while idle.
             return;
         }
         long now = System.currentTimeMillis();

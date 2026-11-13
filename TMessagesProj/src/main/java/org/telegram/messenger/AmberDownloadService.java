@@ -72,12 +72,27 @@ public class AmberDownloadService extends Service {
             return START_NOT_STICKY;
         }
         startForeground(NOTIFICATION_ID, buildNotification(0, 0, "", 0, 0));
-        DownloadQueueController.getInstance(account).attachService(this);
+        DownloadQueueController controller = DownloadQueueController.getInstance(account);
+        controller.attachService(this);
+        if (controller.isIdle()) {
+            // AmberGram: sticky restart (or stray start) with nothing left in the queue —
+            // do NOT linger as a foreground service with an empty notification.
+            // Behave like regular Telegram: no download, no service, no notification.
+            stopSelf();
+        }
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        // AmberGram: always remove our progress notification when the service dies,
+        // so a drained queue never leaves a stale "downloading" notification behind.
+        if (notificationManager != null) {
+            try {
+                notificationManager.cancel(NOTIFICATION_ID);
+            } catch (Throwable ignore) {
+            }
+        }
         DownloadQueueController.getInstance(account).detachService(this);
         super.onDestroy();
     }

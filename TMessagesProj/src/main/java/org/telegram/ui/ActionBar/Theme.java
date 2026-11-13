@@ -1676,7 +1676,7 @@ public class Theme {
             if (isDark != UNKNOWN) {
                 return isDark == DARK;
             }
-            if ("Dark Blue".equals(name) || "Night".equals(name)) {
+            if ("Dark Blue".equals(name) || "Night".equals(name) || "Amber".equals(name)) {
                 isDark = DARK;
             } else if ("Blue".equals(name) || "Arctic Blue".equals(name) || "Day".equals(name)) {
                 isDark = LIGHT;
@@ -3988,7 +3988,7 @@ public class Theme {
         themeInfo.setAccentColorOptions(
                 new int[]    { 0xFF5890C5,                     0xFF239853,                    0xFFCE5E82,                    0xFF7F63C3,                    0xFF2491AD,                    0xFF299C2F,                    0xFF8854B4,                    0xFF328ACF,                    0xFF43ACC7,                    0xFF52AC44,                    0xFFCD5F93,                    0xFFD28036,                    0xFF8366CC,                    0xFFCE4E57,                    0xFFD3AE40,                    0xFF7B88AB },
                 new int[]    { 0xFFB8E18D,                     0xFFFAFBCC,                    0xFFFFF9DC,                    0xFFC14F6E,                    0xFFD1BD1B,                    0xFFFFFAC9,                    0xFFFCF6D8,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000 },
-                new int[]    { 0x00000000,                     0xFFF2FBC9,                    0xFFFBF4DF, 	                         0,	                             0,                    0xFFFDEDB4,                    0xFFFCF7B6,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000 },
+                new int[]    { 0x00000000,                     0xFFF2FBC9,                    0xFFFBF4DF,                                0,                                  0,                    0xFFFDEDB4,                    0xFFFCF7B6,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000 },
                 new int[]    { 0x00000000,                     0xFFdfe2a0,                    0xFFf1b290,                    0xFFd7c1e9,                    0xFFd7b89e,                    0xFFec9e73,                    0xFFcbb0e4,                    0xff9bbce7,                    0xff91c5ec,                    0xff9bc982,                    0xffe4a1c1,                    0xffe3ae7d,                    0xffb8aaea,                    0xffeb9c79,                    0xffd3bc74,                    0xffa0aace },
                 new int[]    { 0x00000000,                     0xFFbad89d,                    0xFFeccf94,                    0xFFe8bdd6,                    0xFFe6dec2,                    0xFFe8d085,                    0xFFebc8e9,                    0xffc0d9f3,                    0xffbfdfec,                    0xffe0dd93,                    0xffe9bed6,                    0xffecd5a2,                    0xffc5c9ee,                    0xfff0bd99,                    0xffe9df9e,                    0xffcacedd },
                 new int[]    { 0x00000000,                     0xFFe2dea7,                    0xFFe7b384,                    0xFFd2aee9,                    0xFFdac5ae,                    0xFFeea677,                    0xFFdfa8d1,                    0xff95c3eb,                    0xffb5e1d9,                    0xffbed595,                    0xffcca8e1,                    0xffdfb076,                    0xffb3b1e2,                    0xffe79db4,                    0xffe0c88b,                    0xffa6add2 },
@@ -4025,6 +4025,38 @@ public class Theme {
         sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Dark Blue", currentNightTheme = themeInfo);
+
+        // Amber fork: built-in OLED black + amber orange theme, the default look
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Amber";
+        themeInfo.assetName = "amber.attheme";
+        themeInfo.previewBackgroundColor = 0xff0a0a0b;
+        themeInfo.previewInColor = 0xff17171a;
+        themeInfo.previewOutColor = 0xff33200e;
+        themeInfo.sortIndex = 0;
+        // accent id 0 == accentBaseColor, so the default state renders the
+        // amber.attheme colors exactly as authored (recolor engine skips it);
+        // firstAccentIsDefault stays false to avoid the 0x100000000L wallpaper
+        // marker which would drop key_chat_wallpaper back to the light default
+        themeInfo.firstAccentIsDefault = false;
+        themeInfo.currentAccentId = 0;
+        themeInfo.setAccentColorOptions(
+                new int[]    { 0xFFF97316, 0xFFFF8C00, 0xFFEA580C },
+                null,
+                null,
+                new int[]    { 0xFF000000, 0xFF171309, 0xFF161006 },
+                new int[]    { 0x00000000, 0x00000000, 0x00000000 },
+                new int[]    { 0x00000000, 0x00000000, 0x00000000 },
+                new int[]    { 0x00000000, 0x00000000, 0x00000000 },
+                new int[]    { 0, 1, 2 },
+                new String[] { "", "", "" },
+                new int[]    { 0, 0, 0 },
+                new int[]    { 0, 0, 0 }
+                );
+        sortAccents(themeInfo);
+        themes.add(themeInfo);
+        themesDict.put("Amber", themeInfo);
+        currentDayTheme = currentNightTheme = themeInfo;
 
         themeInfo = new ThemeInfo();
         themeInfo.name = "Arctic Blue";
@@ -4142,6 +4174,13 @@ public class Theme {
         }
 
         sortThemes();
+
+        // Amber fork: one-time default — apply the Amber theme on fresh installs
+        // and once on upgraded installs (user can still change it afterwards)
+        if (!themeConfig.contains("amber_default_applied")) {
+            themeConfig.edit().putBoolean("amber_default_applied", true).apply();
+            MessagesController.getGlobalMainSettings().edit().putString("theme", "Amber").commit();
+        }
 
         ThemeInfo applyingTheme = null;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
@@ -10214,6 +10253,9 @@ public class Theme {
     public static boolean isHome(ThemeAccent accent) {
         if (accent.parentTheme != null) {
             if (accent.parentTheme.getKey().equals("Blue") && accent.id == 99) {
+                return true;
+            }
+            if (accent.parentTheme.getKey().equals("Amber") && accent.id == 99) {
                 return true;
             }
             if (accent.parentTheme.getKey().equals("Day") && accent.id == 9) {

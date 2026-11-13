@@ -1,9 +1,13 @@
 package org.telegram.messenger;
 
 import android.app.DownloadManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.webkit.MimeTypeMap;
@@ -14,6 +18,7 @@ import org.telegram.tgnet.TLRPC;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
@@ -111,7 +116,7 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
             if (TextUtils.isEmpty(fileName)) {
                 continue;
             }
-            if (findItemByFileName(fileName) != null) {
+            if (hasActiveItemForFileName(fileName)) {
                 continue;
             }
             String displayName = FileLoader.getDocumentFileName(document);
@@ -143,17 +148,18 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
         updateNotification(true);
     }
 
-    private QueueItem findItemByFileName(String fileName) {
+    /** True if a PENDING/DOWNLOADING item with this name exists (terminal items may be re-queued). */
+    private boolean hasActiveItemForFileName(String fileName) {
         if (current != null && fileName.equals(current.fileName)) {
-            return current;
+            return true;
         }
         for (int a = 0; a < queue.size(); a++) {
             QueueItem item = queue.get(a);
-            if (fileName.equals(item.fileName)) {
-                return item;
+            if ((item.state == STATE_PENDING || item.state == STATE_DOWNLOADING) && fileName.equals(item.fileName)) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     private void startNextIfNeeded() {
@@ -170,6 +176,13 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
             }
         }
         if (next == null) {
+            for (int a = queue.size() - 1; a >= 0; a--) {
+                QueueItem item = queue.get(a);
+                if (item.state == STATE_DONE || item.state == STATE_FAILED) {
+                    queue.remove(a);
+                }
+            }
+            persist();
             AmberDownloadService.stop(ApplicationLoader.applicationContext);
             updateNotification(true);
             return;
@@ -224,9 +237,56 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
         if (sourceFile == null || !sourceFile.exists()) {
             return false;
         }
+        String name = !TextUtils.isEmpty(item.displayName) ? item.displayName : item.fileName;
+        if (Build.VERSION.SDK_INT >= 29) {
+            return copyToPublicDownloadsQ(sourceFile, name);
+        }
+        return copyToPublicDownloadsLegacy(name, sourceFile);
+    }
+
+    private String mimeForName(String name) {
+        try {
+            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+            int idx = name.lastIndexOf('.');
+            String extension = idx >= 0 ? name.substring(idx + 1) : "";
+            String mime = mimeTypeMap.getMimeTypeFromExtension(extension.toLowerCase());
+            if (TextUtils.isEmpty(mime)) {
+                return "application/octet-stream";
+            }
+            return mime;
+        } catch (Throwable e) {
+            return "application/octet-stream";
+        }
+    }
+
+    /** Scoped storage path for Android 10+: goes through MediaStore.Downloads. */
+    private boolean copyToPublicDownloadsQ(File sourceFile, String name) throws Throwable {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+        values.put(MediaStore.MediaColumns.MIME_TYPE, mimeForName(name));
+        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Telegram");
+        Uri uri = ApplicationLoader.applicationContext.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+        if (uri == null) {
+            return false;
+        }
+        try (FileInputStream inputStream = new FileInputStream(sourceFile); OutputStream outputStream = ApplicationLoader.applicationContext.getContentResolver().openOutputStream(uri)) {
+            if (outputStream == null) {
+                return false;
+            }
+            byte[] buffer = new byte[1024 * 512];
+            int read;
+            while ((read = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, read);
+            }
+            outputStream.flush();
+        }
+        return true;
+    }
+
+    /** Legacy direct-file path for Android 9 and below. */
+    private boolean copyToPublicDownloadsLegacy(String name, File sourceFile) throws Throwable {
         File destDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Telegram");
         destDir.mkdirs();
-        String name = !TextUtils.isEmpty(item.displayName) ? item.displayName : item.fileName;
         File destFile = new File(destDir, name);
         if (destFile.exists()) {
             destFile = new File(destDir, System.currentTimeMillis() + "_" + name);
@@ -241,15 +301,8 @@ public class DownloadQueueController implements NotificationCenter.NotificationC
             destination.force(true);
         }
         try {
-            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-            int idx = name.lastIndexOf('.');
-            String extension = idx >= 0 ? name.substring(idx + 1) : "";
-            String mime = mimeTypeMap.getMimeTypeFromExtension(extension.toLowerCase());
-            if (TextUtils.isEmpty(mime)) {
-                mime = "application/octet-stream";
-            }
             DownloadManager downloadManager = (DownloadManager) ApplicationLoader.applicationContext.getSystemService(Context.DOWNLOAD_SERVICE);
-            downloadManager.addCompletedDownload(destFile.getName(), destFile.getName(), false, mime, destFile.getAbsolutePath(), destFile.length(), true);
+            downloadManager.addCompletedDownload(destFile.getName(), destFile.getName(), false, mimeForName(name), destFile.getAbsolutePath(), destFile.length(), true);
         } catch (Throwable ignore) {
             // best-effort registration only
         }

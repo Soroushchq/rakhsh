@@ -3862,10 +3862,15 @@ public class ChatActivity extends BaseFragment implements
                         BulletinFactory.of(ChatActivity.this).createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.AmberQueueNoneFound)).show();
                     } else {
                         int amberAdded = DownloadQueueController.getInstance(getAccountInstance().getCurrentAccount()).enqueue(amberQueueObjects);
-                        CharSequence amberText = amberAdded == 1
-                                ? LocaleController.getString(R.string.AmberQueueAddedOne)
-                                : LocaleController.formatString(R.string.AmberQueueAddedMany, amberAdded);
-                        BulletinFactory.of(ChatActivity.this).createSimpleBulletin(R.raw.done, amberText).show();
+                        CharSequence amberText;
+                        if (amberAdded == 0) {
+                            amberText = LocaleController.getString(R.string.AmberQueueAlreadyQueued);
+                        } else if (amberAdded == 1) {
+                            amberText = LocaleController.getString(R.string.AmberQueueAddedOne);
+                        } else {
+                            amberText = LocaleController.formatString(R.string.AmberQueueAddedMany, amberAdded);
+                        }
+                        BulletinFactory.of(ChatActivity.this).createSimpleBulletin(amberAdded == 0 ? R.raw.error : R.raw.done, amberText).show();
                     }
                 } else if (id == chat_enc_timer) {
                     if (getParentActivity() == null) {

@@ -6788,7 +6788,7 @@ public class Theme {
             }
         } else {
             ThemeInfo dayTheme = currentDayTheme;
-            if (dayTheme != null && dayTheme.isDark() && selectedAutoNightType != AUTO_NIGHT_TYPE_NONE && defaultTheme != null) {
+            if (dayTheme != null && !("Amber".equals(dayTheme.getKey())) && dayTheme.isDark() && selectedAutoNightType != AUTO_NIGHT_TYPE_NONE && defaultTheme != null) {
                 dayTheme = defaultTheme;
             }
             if (currentTheme != dayTheme && (currentTheme == null || dayTheme != null && currentTheme.isDark() != dayTheme.isDark())) {
@@ -10255,7 +10255,7 @@ public class Theme {
             if (accent.parentTheme.getKey().equals("Blue") && accent.id == 99) {
                 return true;
             }
-            if (accent.parentTheme.getKey().equals("Amber") && accent.id == 99) {
+            if (accent.parentTheme.getKey().equals("Amber") && accent.id == 0) {
                 return true;
             }
             if (accent.parentTheme.getKey().equals("Day") && accent.id == 9) {

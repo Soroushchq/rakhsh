@@ -7,4 +7,5 @@
     <string name="AmberQueueNoneFound">در انتخاب شما فایل قابل دانلودی نیست</string>
     <string name="AmberQueueCancelAll">لغو همه</string>
     <string name="AmberQueueProgressLine">%1$d از %2$d</string>
+    <string name="AmberQueueAlreadyQueued">فایل‌های انتخابی از قبل در صف دانلود هستند</string>
 </resources>

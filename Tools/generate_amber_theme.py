@@ -19,7 +19,7 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'TMessagesProj/src/main/assets/darkblue.attheme')
 DST = os.path.join(ROOT, 'TMessagesProj/src/main/assets/amber.attheme')
-REGISTRY = '/tmp/theme_registry.json'
+REGISTRY = os.path.join(ROOT, 'Tools/theme_registry.json')
 
 # OLED surface scale (warm neutral dark)
 OLED_BLACK = (0x00, 0x00, 0x00)     # 0.00-0.10
@@ -268,7 +268,7 @@ OVERRIDES_MISSING = {
     'dialogFloatingButton': 0xFFF97316,
     'dialogFloatingButtonPressed': 0xFFEA580C,
     'dialogFloatingIcon': 0xFFFFFFFF,
-    'chats_actionIcon': 0xFFFB923C,
+    'chats_actionIcon': 0xFFFFFFFF,
     'chats_actionPressedBackground': 0x1FF97316,
     'contacts_inviteBackground': 0xFFF97316,
     'contacts_inviteText': 0xFFFFFFFF,
@@ -287,7 +287,7 @@ OVERRIDES_MISSING = {
     'featuredStickers_unread': 0xFFF97316,
     'featuredStickers_buttonProgress': 0xFFFB923C,
     # chats list
-    'chats_onlineCircle': 0xFF000000,
+    'chats_onlineCircle': 0xFFF97316,
     'chats_verifiedCheck': 0xFFF97316,
     'chats_sentReadCheck': 0xFFFB923C,
     'chats_sentError': 0xFFE5646C,
@@ -546,6 +546,43 @@ OVERRIDES_MISSING = {
     'voipgroup_windowBackgroundWhiteInputField': 0xFF1D1D21,
     'voipgroup_windowBackgroundWhiteInputFieldActivated': 0xFFF97316,
     'iv_ab_progress': 0xFFF97316,
+    # saved messages / hidden-archive avatar keys (commit 4e30d105, now generator-native)
+    'avatar_backgroundSaved': 0xFFF97316,
+    'avatar_background2Saved': 0xFFEA580C,
+    'avatar_backgroundArchivedHidden': 0xFF33200E,
+    # remaining registry gaps — dark-friendly values so nothing leaks the light palette
+    'avatar_backgroundBlue': 0xFF256596,
+    'avatar_background2Blue': 0xFF183F61,
+    'avatar_backgroundCyan': 0xFF0E7490,
+    'avatar_background2Cyan': 0xFF0A4A5C,
+    'avatar_backgroundGreen': 0xFF2F7D3B,
+    'avatar_background2Green': 0xFF1F5429,
+    'avatar_backgroundPink': 0xFF9D3256,
+    'avatar_background2Pink': 0xFF6B2440,
+    'avatar_backgroundViolet': 0xFF6D4AA8,
+    'avatar_background2Violet': 0xFF493378,
+    'color_cyan': 0xFF0E7490,
+    'premiumGradient0': 0xFF7C2D12,
+    'premiumGradient1': 0xFF9A3412,
+    'premiumGradient2': 0xFFC2410C,
+    'premiumGradient3': 0xFFEA580C,
+    'premiumGradient4': 0xFFF97316,
+    'premiumGradientBottomSheet1': 0xFF9A3412,
+    'premiumGradientBottomSheet2': 0xFFC2410C,
+    'premiumGradientBottomSheet3': 0xFFF97316,
+    'premiumCoinGradient1': 0xFFC2410C,
+    'premiumCoinGradient2': 0xFFF97316,
+    'statisticChartLineEmpty': 0xFF3A3A3D,
+    'statisticChartLine_cyan': 0xFF22D3EE,
+    'statisticChartLine_purple': 0xFFA855F7,
+    'wallet_comment': 0xFF8E8E93,
+    'wallet_inputCurrency': 0xFFF0E6DC,
+    'chat_inAudioSeekbarFill': 0xFFF0E6DC,
+    'chat_tagAdmin': 0xFFF59E0B,
+    'chat_tagCreator': 0xFFF97316,
+    'voipgroup_connectingProgress': 0xFFF97316,
+    'calls_callReceivedRedIcon': 0xFFEF4444,
+    'dialogGrayLine': 0x14FFFFFF,
 }
 
 def to_signed(c):
@@ -602,6 +639,16 @@ def parse_and_generate():
         if key not in overridden:
             out_lines.append(f"{key}={to_signed(color)}")
             appended += 1
+
+    # keep-last-wins dedupe (base themes contain a few duplicate keys)
+    dedup = {}
+    order = []
+    for line in out_lines:
+        k = line.split('=', 1)[0]
+        if k not in dedup:
+            order.append(k)
+        dedup[k] = line
+    out_lines = [dedup[k] for k in order]
 
     with open(DST, 'w', encoding='utf-8') as f:
         f.write('\n'.join(out_lines) + '\n')

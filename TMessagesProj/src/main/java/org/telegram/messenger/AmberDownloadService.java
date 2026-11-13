@@ -63,6 +63,10 @@ public class AmberDownloadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         account = intent != null ? intent.getIntExtra(EXTRA_ACCOUNT, UserConfig.selectedAccount) : UserConfig.selectedAccount;
         if (intent != null && ACTION_CANCEL.equals(intent.getAction())) {
+            try {
+                startForeground(NOTIFICATION_ID, buildNotification(0, 0, "", 0, 0));
+            } catch (Throwable ignore) {
+            }
             DownloadQueueController.getInstance(account).cancelAll();
             stopSelf();
             return START_NOT_STICKY;
@@ -103,7 +107,8 @@ public class AmberDownloadService extends Service {
         } else {
             builder = new Notification.Builder(this);
         }
-        builder.setSmallIcon(android.R.drawable.stat_sys_download)
+        builder.setSmallIcon(R.drawable.notification)
+                .setColor(0xFFF97316)
                 .setContentTitle(LocaleController.getString(R.string.AmberQueueNotificationTitle))
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)

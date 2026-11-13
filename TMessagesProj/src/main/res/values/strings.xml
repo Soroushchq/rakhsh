@@ -11685,4 +11685,5 @@
     <string name="AmberQueueNoneFound">No downloadable files in the selection</string>
     <string name="AmberQueueCancelAll">Cancel all</string>
     <string name="AmberQueueProgressLine">%1$d of %2$d</string>
+    <string name="AmberQueueAlreadyQueued">Selected files are already in the download queue</string>
 </resources>

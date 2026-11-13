@@ -274,6 +274,7 @@ public class ApplicationLoader extends Application {
             ContactsController.getInstance(a).checkAppAccount();
             DownloadController.getInstance(a);
         }
+        DownloadQueueController.resumeAllQueues();
         BillingController.getInstance().startConnection();
     }
 

@@ -490,6 +490,11 @@
             android:foregroundServiceType="dataSync"
         />
         <service
+            android:name=".AmberDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+        />
+        <service
             android:name=".NotificationRepeat"
             android:exported="false"
             android:foregroundServiceType="dataSync"

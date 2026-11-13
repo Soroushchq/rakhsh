@@ -11678,4 +11678,11 @@
     <string name="FpnvConsentCountry">Country</string>
     <string name="FpnvConsentMccMnc">MCC / MNC</string>
     <string name="FpnvConsentPhoneNumber">Phone Number</string>
+    <string name="AmberQueueMenu">Sequential download</string>
+    <string name="AmberQueueNotificationTitle">Amber sequential downloads</string>
+    <string name="AmberQueueAddedOne">1 file added to the sequential download queue</string>
+    <string name="AmberQueueAddedMany">%1$d files added to the sequential download queue</string>
+    <string name="AmberQueueNoneFound">No downloadable files in the selection</string>
+    <string name="AmberQueueCancelAll">Cancel all</string>
+    <string name="AmberQueueProgressLine">%1$d of %2$d</string>
 </resources>

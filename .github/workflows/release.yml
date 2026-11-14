@@ -87,5 +87,6 @@ jobs:
           - AmberGram branding: OLED amber theme, fancy UI font, AmberGram Settings hub with a dedicated live sequential download queue page, polished phoenix × paper-plane launcher icon with embossed depth.
           - App header always shows AmberGram (brand keys are protected from remote language packs).
           - Download queue fully stops (service + notification) once everything is downloaded — idle behavior matches regular Telegram.
+          - NEW in $GITHUB_REF_NAME: in-app free proxies (AmberGram Settings → Free proxies). Six public GitHub proxy collectors are fetched every 6 hours (automatic wakeup + catch-up on app start), merged and deduplicated, then every proxy is re-tested automatically with a real MTProto handshake through the native engine (no disruption to the active connection). Tap any proxy to connect instantly, long-press to copy its t.me link.
           - Source for this build: this repository at tag $GITHUB_REF_NAME (GPLv2). Not affiliated with Telegram Messenger Inc." \
             dist/*

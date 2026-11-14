@@ -5808,6 +5808,12 @@
     <string name="AppIconPremium">Premium</string>
     <string name="AppIconTurbo">Turbo</string>
     <string name="AppIconNox">Nox</string>
+    <string name="AppIconLeopardFrame">Leopard Frame</string>
+    <string name="AppIconLeopardHalo">Leopard Halo</string>
+    <string name="AppIconLeopard">Leopard</string>
+    <string name="AppIconAmberPhoenixFrame">Amber Phoenix Frame</string>
+    <string name="AppIconAmberPhoenixHalo">Amber Phoenix Halo</string>
+    <string name="AppIconAmberPhoenix">Amber Phoenix</string>
     <string name="AppIconChangedTo">App icon has been changed to %1$s</string>
     <string name="FileTooLarge">File Too Large</string>
     <string name="PremiumPreviewAppIcon">Premium App Icon</string>

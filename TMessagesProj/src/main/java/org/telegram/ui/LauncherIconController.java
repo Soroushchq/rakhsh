@@ -39,7 +39,13 @@ public class LauncherIconController {
         AQUA("AquaIcon", R.drawable.icon_4_background_sa, R.mipmap.icon_foreground_sa, R.string.AppIconAqua),
         PREMIUM("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium, true),
         TURBO("TurboIcon", R.drawable.icon_5_background_sa, R.mipmap.icon_5_foreground_sa, R.string.AppIconTurbo, true),
-        NOX("NoxIcon", R.mipmap.icon_2_background_sa, R.mipmap.icon_foreground_sa, R.string.AppIconNox, true);
+        NOX("NoxIcon", R.mipmap.icon_2_background_sa, R.mipmap.icon_foreground_sa, R.string.AppIconNox, true),
+        LEOPARD("LeopardIcon", R.drawable.icon_7_background_sa, R.drawable.icon_7_foreground_sa, R.string.AppIconLeopardFrame),
+        LEOPARD_RING("LeopardRingIcon", R.drawable.icon_8_background_sa, R.drawable.icon_8_foreground_sa, R.string.AppIconLeopardHalo),
+        LEOPARD_FULL("LeopardFullIcon", R.drawable.icon_9_background_sa, R.drawable.icon_9_foreground_sa, R.string.AppIconLeopard),
+        LEOPARD_PHOENIX("LeopardPhoenixIcon", R.drawable.icon_10_background_sa, R.drawable.icon_10_foreground_sa, R.string.AppIconAmberPhoenixFrame),
+        LEOPARD_PHOENIX_RING("LeopardPhoenixRingIcon", R.drawable.icon_11_background_sa, R.drawable.icon_11_foreground_sa, R.string.AppIconAmberPhoenixHalo),
+        LEOPARD_PHOENIX_FULL("LeopardPhoenixFullIcon", R.drawable.icon_12_background_sa, R.drawable.icon_12_foreground_sa, R.string.AppIconAmberPhoenix);
 
         public final String key;
         public final int background;

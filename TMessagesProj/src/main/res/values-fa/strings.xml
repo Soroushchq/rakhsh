@@ -47,4 +47,10 @@
     <string name="AmbergramProxyCopied">لینک پروکسی کپی شد</string>
     <string name="AmbergramProxyHint">این فهرست از لیست‌های عمومی گیت‌هاب گردآوری و هر ۶ ساعت خودکار به‌روزرسانی و با دست‌دادن واقعی MTProto تست می‌شود. پروکسی‌هایی که وصل نمی‌شوند به‌صورت خودکار حذف می‌شوند. با لمس وصل شوید و با لمس طولانی، لینک t.me پروکسی کپی می‌شود.</string>
     <string name="AmbergramProxyRemoved">پاک‌سازی خودکار: %1$s پروکسی خراب حذف شد</string>
+    <string name="AppIconLeopardFrame">پلنگی قاب‌دار</string>
+    <string name="AppIconLeopardHalo">پلنگی هاله‌دار</string>
+    <string name="AppIconLeopard">پلنگی</string>
+    <string name="AppIconAmberPhoenixFrame">ققنوس آمبر قاب‌دار</string>
+    <string name="AppIconAmberPhoenixHalo">ققنوس آمبر هاله‌دار</string>
+    <string name="AppIconAmberPhoenix">ققنوس آمبر</string>
 </resources>

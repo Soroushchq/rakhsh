@@ -29,3 +29,23 @@
   - این گزارش + بخش احراز هویت در LESSONS اضافه شد و دوباره پوش شد.
 - **درس امنیتی:** مقدار توکن هرگز داخل ریپو/فایل‌های مغز دوم نوشته نمی‌شود (ریپو عمومی است!)؛ فقط مسیر ذخیره ثبت می‌شود.
 - **اصلاح نکته نوبت ۱:** فرض اشتباه «ممکن است my-project هم پاک شود» اصلاح شد — آزمایشی ثابت شد `/home/z/my-project` پایدار است؛ فقط `/home/z/amber` و پوشه home با ریست سندباکس می‌روند.
+
+---
+
+## نوبت ۳ — خطای پارس APK + پیاده‌سازی حالت شبح (نسخه 0.3.0)
+- **گزارش کاربر:** موقع نصب نسخه قبلی، پیام «مشکل در پارس» (parse error) داد.
+- **ریشه‌یابی:**
+  - بررسی `TMessagesProj_App/build.gradle`: امضای استاندارد AGP، minSdk=23، `useLegacyPackaging=true` → ساختار APK سالم و سازگار است.
+  - بررسی release.yml: امضا داخل خود gradle انجام می‌شود؛ ترتیب zipalign/sign تداخلی ندارد.
+  - نتیجه: به‌احتمال زیاد دانلود ناقص/خراب (۸۰+ مگابایت از طریق اینترنت فیلترشده) یا باز کردن فایل اشتباه (مثلاً Source code zip). در changelog جدید راهنمای نصب + تأکید بر تطبیق SHA-256 اضافه شد؛ حداقل اندروید ۶.۰.
+- **قابلیت جدید — حالت شبح (Ghost Mode):**
+  - فایل جدید `AmberGhost.java`: وضعیت فعال/غیرفعال در `mainconfig` (`amberGhostMode`)، ردیابی چت باز، صف خوانده‌شده‌های معوق، پخش هنگام خروج.
+  - `MessagesController.markDialogAsRead`: دروازه شبح — اگر چت باز و شبح روشن → ذخیره در صف و خروج؛ بدنه اصلی به `amberGhostMarkDialogAsRead` منتقل شد.
+  - `MessagesController.sendTyping`: با شبح روشن، هرگز تایپ ارسال نمی‌شود (دروازه در نسخه ۵-آرگومان که نسخه ۴-آرگومان هم به آن delegate می‌کند).
+  - `ChatActivity`: onResume → `chatOpened(dialog_id)`؛ onPause → `chatClosed` + `flushRead` (پخش واقعی خوانده‌شده‌ها).
+  - `AmbergramSettingsActivity`: ردیف «حالت شبح» با آیکون `R.drawable.ghost` نارنجی و مقدار روشن/خاموش + Toast توضیح.
+  - رشته‌ها: `AmberGhostSection/On/Off/Desc` در values و values-fa.
+- **نسخه:** bump به 0.3.0 (7298)، تگ `v0.3.0-alpha`، changelog بازنویسی شد (قابلیت‌های قدیمی از حالت NEW خارج شدند — همان خطای کپی‌شدن changelog نوبت ۱ اصلاح شد).
+- **کامیت:** `ade77889` + تگ → CI هر دو سبز: run 43610033486 (ci/master) SUCCESS — کامپایل سالم؛ run 43610035729 (release/v0.3.0-alpha) SUCCESS — انتشار با `AmberGram-v0.3.0-alpha-universal.apk` (۷۹.۳MB) + SHA256SUMS
+- **نکته فنی:** grep با پرچم `-rn` اشتباه بود (r=replace)! درست: `rg -n`. 
+- **درس معماری:** دروازه مرکزی در MessagesController بهتر از وصله در همه call-site ها است — یک نقطه حقیقت.

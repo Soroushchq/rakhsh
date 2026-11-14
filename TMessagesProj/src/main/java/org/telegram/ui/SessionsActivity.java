@@ -758,7 +758,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         session.platform = "Android";
         session.device_model = Build.MANUFACTURER + " " + Build.MODEL;
         session.system_version = "SDK " + Build.VERSION.SDK_INT;
-        session.app_name = "Telegram Android";
+        session.app_name = "AmberGram Android";
         session.app_version = "";
         try {
             final PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);

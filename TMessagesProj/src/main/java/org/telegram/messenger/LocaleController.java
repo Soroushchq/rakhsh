@@ -64,6 +64,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -1325,10 +1326,60 @@ public class LocaleController {
         "Page6Message",
     };
 
+    /**
+     * AmberGram: rewrites the remaining Telegram wording inside remote (server)
+     * language packs to the fork brand while a pack is being loaded, so no screen
+     * ever falls back to "Telegram" / «تلگرام». Values that look like URLs (contain
+     * "://" or belong to *Url keys) are left untouched so links such as
+     * t.me/TelegramTips keep working; protected brand keys above are dropped
+     * entirely so the baked-in APK strings win.
+     */
+    private static final String AMBER_FA = "\u0622\u0645\u0628\u0631\u06AF\u0631\u0645";
+    private static final String TELEGRAM_CYRILLIC = "\u0422\u0435\u043B\u0435\u0433\u0440\u0430\u043C";
+    private static final String[] REMOTE_BRAND_WORDS = {
+        "\u062A\u0644\u06AF\u0631\u0627\u0645",
+        "\u062A\u064A\u0644\u064A\u062C\u0631\u0627\u0645",
+        "\u062A\u06CC\u0644\u06CC\u062C\u0631\u0627\u0645",
+        "\u062A\u0644\u064A\u062C\u0631\u0627\u0645",
+        "\u062A\u0644\u06CC\u062C\u0631\u0627\u0645",
+        "\u062A\u0644\u064A\u06AF\u0631\u0627\u0645",
+        "\u062A\u0644\u06CC\u06AF\u0631\u0627\u0645",
+    };
+
+    private static String rebrandValue(String v) {
+        v = v.replace("TELEGRAM", "AMBERGRAM").replace("Telegram", "AmberGram").replace(TELEGRAM_CYRILLIC, "AmberGram");
+        for (int a = 0; a < REMOTE_BRAND_WORDS.length; a++) {
+            v = v.replace(REMOTE_BRAND_WORDS[a], AMBER_FA);
+        }
+        return v;
+    }
+
+    private static boolean needsRebrand(String v) {
+        if (v.contains("Telegram") || v.contains(TELEGRAM_CYRILLIC)) {
+            return true;
+        }
+        for (int a = 0; a < REMOTE_BRAND_WORDS.length; a++) {
+            if (v.contains(REMOTE_BRAND_WORDS[a])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static HashMap<String, String> sanitizeBrandKeys(HashMap<String, String> map) {
         if (map != null) {
             for (int a = 0; a < PROTECTED_BRAND_KEYS.length; a++) {
                 map.remove(PROTECTED_BRAND_KEYS[a]);
+            }
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String k = entry.getKey();
+                String v = entry.getValue();
+                if (k == null || v == null || k.endsWith("Url") || v.contains("://")) {
+                    continue;
+                }
+                if (needsRebrand(v)) {
+                    entry.setValue(rebrandValue(v));
+                }
             }
         }
         return map;

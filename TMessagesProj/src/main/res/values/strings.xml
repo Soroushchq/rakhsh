@@ -11724,5 +11724,6 @@
     <string name="AmbergramProxyShowMore">Showing the best %1$s of %2$s proxies</string>
     <string name="AmbergramProxyFailedSources">%1$s source(s) unreachable</string>
     <string name="AmbergramProxyCopied">Proxy link copied</string>
-    <string name="AmbergramProxyHint">Proxies are collected from public GitHub lists and automatically re-fetched and re-tested every 6 hours with a real MTProto handshake. Tap a proxy to connect, long-press to copy its t.me link.</string>
+    <string name="AmbergramProxyHint">Proxies are collected from public GitHub lists and automatically re-fetched and re-tested every 6 hours with a real MTProto handshake. Proxies that fail to connect are removed automatically. Tap a proxy to connect, long-press to copy its t.me link.</string>
+    <string name="AmbergramProxyRemoved">Auto-clean: %1$s dead proxies removed</string>
 </resources>

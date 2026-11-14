@@ -88,5 +88,6 @@ jobs:
           - App header always shows AmberGram (brand keys are protected from remote language packs).
           - Download queue fully stops (service + notification) once everything is downloaded — idle behavior matches regular Telegram.
           - NEW in $GITHUB_REF_NAME: in-app free proxies (AmberGram Settings → Free proxies). Six public GitHub proxy collectors are fetched every 6 hours (automatic wakeup + catch-up on app start), merged and deduplicated, then every proxy is re-tested automatically with a real MTProto handshake through the native engine (no disruption to the active connection). Tap any proxy to connect instantly, long-press to copy its t.me link.
+          - NEW in $GITHUB_REF_NAME: automatic dead-proxy cleanup. Proxies that fail their connection test are removed automatically from the list and from the system proxy screen; if the active proxy dies, AmberGram switches to the best surviving proxy instantly (or turns the proxy off when nothing is left), and removal is skipped during device network outages so a bad connection never wipes the whole list.
           - Source for this build: this repository at tag $GITHUB_REF_NAME (GPLv2). Not affiliated with Telegram Messenger Inc." \
             dist/*

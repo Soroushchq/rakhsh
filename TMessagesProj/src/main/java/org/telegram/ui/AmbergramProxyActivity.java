@@ -265,6 +265,11 @@ public class AmbergramProxyActivity extends BaseFragment implements AmbergramPro
         builder.append("  •  ");
         builder.append(LocaleController.formatString(R.string.AmbergramProxyStats,
                 String.valueOf(manager.getWorkingCount()), String.valueOf(total)));
+        if (manager.getLastRemovedCount() > 0) {
+            builder.append("  •  ");
+            builder.append(LocaleController.formatString(R.string.AmbergramProxyRemoved,
+                    String.valueOf(manager.getLastRemovedCount())));
+        }
         if (manager.getFailedSourceCount() > 0) {
             builder.append("  •  ");
             builder.append(LocaleController.formatString(R.string.AmbergramProxyFailedSources,
@@ -324,6 +329,11 @@ public class AmbergramProxyActivity extends BaseFragment implements AmbergramPro
 
     @Override
     public void onProxyEvent(int event, int done, int total) {
+        if (event == AmbergramProxyManager.EVENT_LIST_CLEANED && done > 0 && getParentActivity() != null) {
+            Toast.makeText(getParentActivity(),
+                    LocaleController.formatString(R.string.AmbergramProxyRemoved, String.valueOf(done)),
+                    Toast.LENGTH_SHORT).show();
+        }
         AndroidUtilities.runOnUIThread(() -> {
             if (!updateScheduled) {
                 updateScheduled = true;

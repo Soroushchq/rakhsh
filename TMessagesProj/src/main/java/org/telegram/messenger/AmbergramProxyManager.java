@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
 
@@ -21,7 +23,9 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -50,10 +54,18 @@ public class AmbergramProxyManager {
     private static final int TEST_BATCH = 20;
     private static final int RECHECK_MIN_INTERVAL = 2 * 60 * 1000;
 
+    // Auto-cleanup: a proxy that fails a real MTProto handshake is removed from
+    // the list right away. A whole cycle where EVERY tested proxy failed (and at
+    // least OFFLINE_GUARD_MIN_TESTED were tested) is treated as a likely device
+    // network outage, so nothing is removed in that case.
+    private static final int REMOVE_AFTER_FAILS = 1;
+    private static final int OFFLINE_GUARD_MIN_TESTED = 10;
+
     public static final int EVENT_FETCH_STARTED = 0;
     public static final int EVENT_FETCH_DONE = 1;
     public static final int EVENT_TEST_PROGRESS = 2;
     public static final int EVENT_TEST_DONE = 3;
+    public static final int EVENT_LIST_CLEANED = 4;
 
     public interface Listener {
         void onProxyEvent(int event, int done, int total);
@@ -136,6 +148,9 @@ public class AmbergramProxyManager {
     private volatile int processedCount;
     private volatile int testTotal;
     private volatile int failedSourceCount;
+    private volatile int cycleTestedCount;
+    private volatile int cycleSuccessCount;
+    private volatile int lastRemovedCount;
 
     private long lastFetchAt;
     private long lastTestAt;
@@ -146,6 +161,12 @@ public class AmbergramProxyManager {
             return;
         }
         testing = false;
+        synchronized (proxies) {
+            for (int a = 0; a < proxies.size(); a++) {
+                proxies.get(a).checking = false;
+            }
+        }
+        autoRemoveDeadProxies();
         synchronized (proxies) {
             sortProxies();
         }
@@ -413,6 +434,9 @@ public class AmbergramProxyManager {
         testing = true;
         processedCount = 0;
         testTotal = snapshot.size();
+        cycleTestedCount = 0;
+        cycleSuccessCount = 0;
+        lastRemovedCount = 0;
         notifyListeners(EVENT_TEST_PROGRESS, 0, testTotal);
         long watchdogDelay = Math.min(testTotal * 6000L + 60000L, 12 * 60 * 1000L);
         AndroidUtilities.cancelRunOnUIThread(testWatchdog);
@@ -421,6 +445,9 @@ public class AmbergramProxyManager {
     }
 
     private void testBatch(final ArrayList<ProxyItem> list, final int index) {
+        if (!testing) {
+            return;
+        }
         final int end = Math.min(list.size(), index + TEST_BATCH);
         if (index >= end) {
             finishTesting();
@@ -447,11 +474,16 @@ public class AmbergramProxyManager {
                     item.available = false;
                     item.ping = -1;
                     item.deadStreak++;
+                    FileLog.d(TAG + ": DEAD " + item.host + ":" + item.port + " (streak " + item.deadStreak + ")");
                 } else {
                     item.available = true;
                     item.ping = (int) time;
                     item.lastOkAt = System.currentTimeMillis();
                     item.deadStreak = 0;
+                }
+                cycleTestedCount++;
+                if (time != -1) {
+                    cycleSuccessCount++;
                 }
                 processedCount++;
                 notifyListeners(EVENT_TEST_PROGRESS, processedCount, testTotal);
@@ -470,6 +502,7 @@ public class AmbergramProxyManager {
         testing = false;
         lastTestAt = System.currentTimeMillis();
         AndroidUtilities.cancelRunOnUIThread(testWatchdog);
+        autoRemoveDeadProxies();
         synchronized (proxies) {
             sortProxies();
             if (proxies.size() > MAX_PROXIES) {
@@ -478,6 +511,118 @@ public class AmbergramProxyManager {
         }
         saveToDisk();
         notifyListeners(EVENT_TEST_DONE, processedCount, testTotal);
+    }
+
+    // ---------------------------------------------------------------- auto cleanup
+
+    /**
+     * AmberGram fork: automatically removes proxies that failed their MTProto
+     * handshake. Every removal also cleans the official SharedConfig proxy list
+     * so dead entries never accumulate in the system proxy screen, and if the
+     * currently active proxy died, the best surviving proxy (lowest ping) is
+     * connected automatically instead; if nothing survived, the proxy is
+     * switched off cleanly instead of leaving the user with a broken
+     * "connected" state.
+     */
+    private void autoRemoveDeadProxies() {
+        final int tested = cycleTestedCount;
+        final int successes = cycleSuccessCount;
+        boolean massFailure = tested >= OFFLINE_GUARD_MIN_TESTED && successes == 0;
+        boolean offlineDevice = successes == 0 && tested > 0 && !isDeviceOnline();
+        if (massFailure || offlineDevice) {
+            // Not a single proxy answered — most likely the device lost
+            // connectivity, not every proxy dying at once. Keep the list intact.
+            FileLog.d(TAG + ": cleanup skipped, all " + tested + " tests failed (device offline or network outage)");
+            return;
+        }
+        ArrayList<ProxyItem> removed = new ArrayList<>();
+        ProxyItem best = null;
+        synchronized (proxies) {
+            Iterator<ProxyItem> iterator = proxies.iterator();
+            while (iterator.hasNext()) {
+                ProxyItem item = iterator.next();
+                if (item.checking) {
+                    continue;
+                }
+                if (!item.available && item.deadStreak >= REMOVE_AFTER_FAILS) {
+                    removed.add(item);
+                    iterator.remove();
+                }
+            }
+            for (int a = 0; a < proxies.size(); a++) {
+                ProxyItem item = proxies.get(a);
+                if (item.available && item.ping >= 0 && (best == null || item.ping < best.ping)) {
+                    best = item;
+                }
+            }
+        }
+        if (removed.isEmpty()) {
+            return;
+        }
+        lastRemovedCount = removed.size();
+        FileLog.d(TAG + ": auto-removed " + removed.size() + " dead proxies");
+        AndroidUtilities.runOnUIThread(() -> cleanupSharedConfig(removed, best));
+        notifyListeners(EVENT_LIST_CLEANED, lastRemovedCount, 0);
+    }
+
+    private void cleanupSharedConfig(ArrayList<ProxyItem> removed, ProxyItem bestFallback) {
+        try {
+            SharedConfig.loadProxyList();
+            SharedConfig.ProxyInfo diedCurrent = null;
+            for (int a = 0; a < removed.size(); a++) {
+                ProxyItem item = removed.get(a);
+                SharedConfig.ProxyInfo match = findSharedProxy(item.host, item.port, item.secret);
+                if (match == null) {
+                    continue;
+                }
+                if (match == SharedConfig.currentProxy) {
+                    diedCurrent = match;
+                } else {
+                    SharedConfig.deleteProxy(match);
+                }
+            }
+            if (diedCurrent != null) {
+                boolean wasEnabled = MessagesController.getGlobalMainSettings().getBoolean("proxy_enabled", false);
+                if (wasEnabled && bestFallback != null) {
+                    FileLog.d(TAG + ": active proxy died, switching to " + bestFallback.host + ":" + bestFallback.port);
+                    connectTo(bestFallback);
+                } else {
+                    FileLog.d(TAG + ": active proxy died, no replacement — proxy disabled");
+                    SharedConfig.deleteProxy(diedCurrent);
+                }
+            }
+            if (diedCurrent != null && SharedConfig.currentProxy != diedCurrent) {
+                SharedConfig.deleteProxy(diedCurrent);
+            }
+        } catch (Throwable t) {
+            FileLog.e(t);
+        }
+    }
+
+    private static SharedConfig.ProxyInfo findSharedProxy(String host, int port, String secret) {
+        for (int a = 0; a < SharedConfig.proxyList.size(); a++) {
+            SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(a);
+            if (info != null && info.settings != null
+                    && Objects.equals(info.settings.getAddress(), host)
+                    && info.settings.getPort() == port
+                    && Objects.equals(info.settings.getSecret(), secret)) {
+                return info;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isDeviceOnline() {
+        try {
+            ConnectivityManager manager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (manager == null) {
+                return true;
+            }
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            return info != null && info.isConnected();
+        } catch (Throwable t) {
+            return true;
+        }
     }
 
     private void sortProxies() {
@@ -561,6 +706,10 @@ public class AmbergramProxyManager {
         return failedSourceCount;
     }
 
+    public int getLastRemovedCount() {
+        return lastRemovedCount;
+    }
+
     public long getLastFetchAt() {
         return lastFetchAt;
     }
@@ -624,6 +773,7 @@ public class AmbergramProxyManager {
                     .putLong("last_fetch", lastFetchAt)
                     .putLong("last_test", lastTestAt)
                     .putInt("failed_sources", failedSourceCount)
+                    .putInt("last_removed", lastRemovedCount)
                     .apply();
         } catch (Throwable t) {
             FileLog.e(t);
@@ -635,6 +785,7 @@ public class AmbergramProxyManager {
             lastFetchAt = prefs().getLong("last_fetch", 0);
             lastTestAt = prefs().getLong("last_test", 0);
             failedSourceCount = prefs().getInt("failed_sources", 0);
+            lastRemovedCount = prefs().getInt("last_removed", 0);
             String raw = prefs().getString("data", null);
             if (raw == null) {
                 return;

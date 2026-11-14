@@ -18,5 +18,7 @@
     <string name="AmbergramQueueRemove">حذف</string>
     <string name="AmbergramQueueRemoved">از صف دانلود حذف شد</string>
     <string name="AmbergramQueueSummary">%1$s در انتظار • %2$s در حال دانلود</string>
+    <string name="AmbergramQueueRowIdle">دانلود فعالی وجود ندارد</string>
+    <string name="AmbergramQueuePageHint">فایل‌ها یکی‌یکی دانلود و در پوشه Downloads/Telegram ذخیره می‌شوند.</string>
     <string name="AmbergramQueueComingSoon">قابلیت‌های بیشتری از AmberGram در راه است.</string>
 </resources>

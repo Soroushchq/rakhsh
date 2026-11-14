@@ -84,7 +84,8 @@ jobs:
             --notes "Unofficial GPLv2 client based on the Telegram open-source code (Android).
           - Signed universal APK (afat flavor, all ABIs). SHA-256 checksums included.
           - Packaged with the project's own api_id/api_hash — login works out of the box.
-          - AmberGram branding: OLED amber theme, fancy UI font, AmberGram Settings with the live sequential download queue, ghost-phoenix × paper-plane launcher icon.
-          - Download queue now fully stops (service + notification) once everything is downloaded — idle behavior matches regular Telegram.
+          - AmberGram branding: OLED amber theme, fancy UI font, AmberGram Settings hub with a dedicated live sequential download queue page, polished phoenix × paper-plane launcher icon with embossed depth.
+          - App header always shows AmberGram (brand keys are protected from remote language packs).
+          - Download queue fully stops (service + notification) once everything is downloaded — idle behavior matches regular Telegram.
           - Source for this build: this repository at tag $GITHUB_REF_NAME (GPLv2). Not affiliated with Telegram Messenger Inc." \
             dist/*

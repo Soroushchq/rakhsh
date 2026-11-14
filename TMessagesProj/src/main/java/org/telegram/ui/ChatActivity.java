@@ -35407,6 +35407,8 @@ public class ChatActivity extends BaseFragment implements
                         selectedMessagesCanCopyIds[a].clear();
                         selectedMessagesCanStarIds[a].clear();
                         selectedMessagesIds[a].clear();
+                        selectedMessagesCanCopyIds[a].clear();
+                        selectedMessagesCanStarIds[a].clear();
                     }
                     hideActionMode();
                     updatePinnedMessageView(true);

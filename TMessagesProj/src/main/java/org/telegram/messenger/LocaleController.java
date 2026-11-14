@@ -1271,7 +1271,7 @@ public class LocaleController {
                 }
                 eventType = parser.next();
             }
-            return stringMap;
+            return sanitizeBrandKeys(stringMap);
         } catch (Exception e) {
             try {
                 File filesDir = ApplicationLoader.getFilesDirFixed();
@@ -1296,7 +1296,24 @@ public class LocaleController {
                 FileLog.e(e);
             }
         }
-        return stringMap != null ? stringMap : new HashMap<>();
+        return stringMap != null ? sanitizeBrandKeys(stringMap) : new HashMap<>();
+    }
+
+    /**
+     * AmberGram: brand keys that must never be overridden by remote (server) language
+     * packs. The official Persian pack, for example, ships AppName = "تلگرام", which
+     * made the main header show "Telegram" instead of "AmberGram". Removing these
+     * keys here makes getString() fall back to the baked-in APK values.
+     */
+    private static final String[] PROTECTED_BRAND_KEYS = { "AppName", "AppNameBeta" };
+
+    private static HashMap<String, String> sanitizeBrandKeys(HashMap<String, String> map) {
+        if (map != null) {
+            for (int a = 0; a < PROTECTED_BRAND_KEYS.length; a++) {
+                map.remove(PROTECTED_BRAND_KEYS[a]);
+            }
+        }
+        return map;
     }
 
     private static boolean hasMalformedCopy(File file) {

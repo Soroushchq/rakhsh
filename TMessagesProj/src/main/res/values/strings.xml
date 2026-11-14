@@ -11697,5 +11697,7 @@
     <string name="AmbergramQueueRemove">Remove</string>
     <string name="AmbergramQueueRemoved">Removed from the queue</string>
     <string name="AmbergramQueueSummary">%1$s waiting • %2$s downloading</string>
+    <string name="AmbergramQueueRowIdle">No active downloads</string>
+    <string name="AmbergramQueuePageHint">Files are downloaded one at a time and saved to Downloads/Telegram.</string>
     <string name="AmbergramQueueComingSoon">More AmberGram features are on the way.</string>
 </resources>

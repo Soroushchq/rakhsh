@@ -11412,6 +11412,9 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean sendTyping(long dialogId, long threadMsgId, int action, String emojicon, int classGuid) {
+        if (AmberGhost.isEnabled()) {
+            return false;
+        }
         if (action < 0 || action >= sendingTypings.length || dialogId == 0) {
             return false;
         }
@@ -14709,6 +14712,15 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void markDialogAsRead(long dialogId, int maxPositiveId, int maxNegativeId, int maxDate, boolean popup, long threadId, int countDiff, boolean readNow, int scheduledCount) {
+        // AmberGram ghost mode: defer read receipts while the chat is open, replay on leave
+        if (AmberGhost.shouldDeferRead(dialogId)) {
+            AmberGhost.deferRead(dialogId, maxPositiveId, maxNegativeId, maxDate, threadId, scheduledCount);
+            return;
+        }
+        amberGhostMarkDialogAsRead(dialogId, maxPositiveId, maxNegativeId, maxDate, popup, threadId, countDiff, readNow, scheduledCount);
+    }
+
+    public void amberGhostMarkDialogAsRead(long dialogId, int maxPositiveId, int maxNegativeId, int maxDate, boolean popup, long threadId, int countDiff, boolean readNow, int scheduledCount) {
         boolean createReadTask;
 
         if (threadId != 0) {

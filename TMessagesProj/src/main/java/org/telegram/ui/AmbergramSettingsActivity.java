@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.telegram.messenger.AmberGhost;
 import org.telegram.messenger.AmbergramProxyManager;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadQueueController;
@@ -37,6 +39,7 @@ public class AmbergramSettingsActivity extends BaseFragment implements DownloadQ
 
     private TextView queueValueView;
     private TextView proxyValueView;
+    private TextView ghostValueView;
     private boolean updateScheduled;
     private boolean proxyUpdateScheduled;
 
@@ -98,12 +101,16 @@ public class AmbergramSettingsActivity extends BaseFragment implements DownloadQ
         proxyDivider.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundGray));
         card.addView(proxyDivider, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 1));
 
+        LinearLayout ghostRow = makeGhostRow(context);
+        card.addView(ghostRow, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
         TextInfoPrivacyCell footerCell = new TextInfoPrivacyCell(context, 24, null);
         footerCell.setText(LocaleController.getString(R.string.AmbergramQueueComingSoon));
         contentWrapper.addView(footerCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         refreshQueueValue();
         refreshProxyValue();
+        refreshGhostValue();
         return fragmentView;
     }
 
@@ -214,6 +221,60 @@ public class AmbergramSettingsActivity extends BaseFragment implements DownloadQ
         row.addView(chevronView, LayoutHelper.createLinear(AndroidUtilities.dp(28), ViewGroup.LayoutParams.WRAP_CONTENT, 0, Gravity.CENTER_VERTICAL, AndroidUtilities.dp(8), 0, 0, 0));
 
         return row;
+    }
+
+    private LinearLayout makeGhostRow(Context context) {
+        LinearLayout row = new LinearLayout(context);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(10), AndroidUtilities.dp(16), AndroidUtilities.dp(10));
+        row.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
+        row.setOnClickListener(v -> {
+            boolean newValue = !AmberGhost.isEnabled();
+            AmberGhost.setEnabled(newValue);
+            refreshGhostValue();
+            if (getParentActivity() != null) {
+                Toast.makeText(getParentActivity(), LocaleController.getString(R.string.AmberGhostDesc), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ImageView iconView = new ImageView(context);
+        iconView.setImageResource(R.drawable.ghost);
+        iconView.setColorFilter(BRAND_ORANGE, PorterDuff.Mode.SRC_IN);
+        row.addView(iconView, LayoutHelper.createLinear(AndroidUtilities.dp(26), AndroidUtilities.dp(26), 0, Gravity.CENTER_VERTICAL, 0, 0, AndroidUtilities.dp(14), 0));
+
+        LinearLayout textCol = new LinearLayout(context);
+        textCol.setOrientation(LinearLayout.VERTICAL);
+        row.addView(textCol, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1f));
+
+        TextView titleView = new TextView(context);
+        titleView.setTypeface(AndroidUtilities.bold());
+        titleView.setTextSize(16);
+        ThemeBind.textColor(titleView, Theme.key_windowBackgroundWhiteBlackText, null);
+        titleView.setText(LocaleController.getString(R.string.AmberGhostSection));
+        titleView.setSingleLine(true);
+        textCol.addView(titleView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        ghostValueView = new TextView(context);
+        ghostValueView.setTypeface(AndroidUtilities.bold());
+        ghostValueView.setTextSize(13);
+        ghostValueView.setSingleLine(true);
+        textCol.addView(ghostValueView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        return row;
+    }
+
+    private void refreshGhostValue() {
+        if (ghostValueView == null || getContext() == null) {
+            return;
+        }
+        if (AmberGhost.isEnabled()) {
+            ghostValueView.setText(LocaleController.getString(R.string.AmberGhostOn));
+            ghostValueView.setTextColor(BRAND_ORANGE);
+        } else {
+            ghostValueView.setText(LocaleController.getString(R.string.AmberGhostOff));
+            ghostValueView.setTextColor(getThemedColor(Theme.key_windowBackgroundWhiteGrayText2));
+        }
     }
 
     private void refreshProxyValue() {

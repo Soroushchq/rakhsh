@@ -178,6 +178,7 @@ import org.telegram.messenger.SendMessageChatArguments;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagePreviewParams;
 import org.telegram.messenger.MessageSuggestionParams;
+import org.telegram.messenger.AmberGhost;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
@@ -30681,6 +30682,8 @@ public class ChatActivity extends BaseFragment implements
         super.onResume();
         checkShowBlur(false);
         activityResumeTime = System.currentTimeMillis();
+        // AmberGram ghost mode: defer read receipts while this chat is open
+        AmberGhost.chatOpened(dialog_id);
         if (openImport && getSendMessagesHelper().getImportingHistory(dialog_id) != null) {
             ImportingAlert alert = new ImportingAlert(getParentActivity(), null, this, themeDelegate);
             alert.setOnHideListener(dialog -> {
@@ -30896,6 +30899,9 @@ public class ChatActivity extends BaseFragment implements
     public void onPause() {
         super.onPause();
         scrolling = false;
+        // AmberGram ghost mode: chat closed — replay any deferred read receipts now
+        AmberGhost.chatClosed(dialog_id);
+        AmberGhost.flushRead(dialog_id, currentAccount);
         if (scrimPopupWindow != null) {
             scrimPopupWindow.setPauseNotifications(false);
             closeMenu();

@@ -11732,4 +11732,8 @@
     <string name="AmbergramProxyCopied">Proxy link copied</string>
     <string name="AmbergramProxyHint">Proxies are collected from public GitHub lists and automatically re-fetched and re-tested every 6 hours with a real MTProto handshake. Proxies that fail to connect are removed automatically. Tap a proxy to connect, long-press to copy its t.me link.</string>
     <string name="AmbergramProxyRemoved">Auto-clean: %1$s dead proxies removed</string>
+    <string name="AmberGhostSection">Ghost mode</string>
+    <string name="AmberGhostOn">On</string>
+    <string name="AmberGhostOff">Off</string>
+    <string name="AmberGhostDesc">Ghost mode: chats you open are not marked as read until you leave them, and your typing indicator is never sent.</string>
 </resources>

@@ -47,6 +47,10 @@
     <string name="AmbergramProxyCopied">لینک پروکسی کپی شد</string>
     <string name="AmbergramProxyHint">این فهرست از لیست‌های عمومی گیت‌هاب گردآوری و هر ۶ ساعت خودکار به‌روزرسانی و با دست‌دادن واقعی MTProto تست می‌شود. پروکسی‌هایی که وصل نمی‌شوند به‌صورت خودکار حذف می‌شوند. با لمس وصل شوید و با لمس طولانی، لینک t.me پروکسی کپی می‌شود.</string>
     <string name="AmbergramProxyRemoved">پاک‌سازی خودکار: %1$s پروکسی خراب حذف شد</string>
+    <string name="AmberGhostSection">حالت شبح</string>
+    <string name="AmberGhostOn">روشن</string>
+    <string name="AmberGhostOff">خاموش</string>
+    <string name="AmberGhostDesc">حالت شبح فعال شد: چت‌هایی که باز می‌کنی تا وقتی از آن‌ها خارج نشدی خوانده‌شده ثبت نمی‌شوند و نشانگر تایپ هرگز ارسال نمی‌شود.</string>
     <string name="AppIconLeopardFrame">پلنگی قاب‌دار</string>
     <string name="AppIconLeopardHalo">پلنگی هاله‌دار</string>
     <string name="AppIconLeopard">پلنگی</string>

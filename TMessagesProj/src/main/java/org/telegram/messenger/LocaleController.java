@@ -1303,9 +1303,27 @@ public class LocaleController {
      * AmberGram: brand keys that must never be overridden by remote (server) language
      * packs. The official Persian pack, for example, ships AppName = "تلگرام", which
      * made the main header show "Telegram" instead of "AmberGram". Removing these
-     * keys here makes getString() fall back to the baked-in APK values.
+     * keys here makes getString() fall back to the baked-in APK values (with the
+     * localized values-fa variants picked up automatically for Persian).
      */
-    private static final String[] PROTECTED_BRAND_KEYS = { "AppName", "AppNameBeta" };
+    private static final String[] PROTECTED_BRAND_KEYS = {
+        "AppName",
+        "AppNameBeta",
+        // empty main chat list — remote pack still says "به تلگرام خوش آمدید"
+        "NoChats",
+        "NoChatsHelp",
+        "NoChatsContactsHelp",
+        // settings row pointing at the tips channel
+        "TelegramFeatures",
+        // first-launch intro slides
+        "Page1Title",
+        "Page1Message",
+        "Page2Message",
+        "Page3Message",
+        "Page4Message",
+        "Page5Message",
+        "Page6Message",
+    };
 
     private static HashMap<String, String> sanitizeBrandKeys(HashMap<String, String> map) {
         if (map != null) {

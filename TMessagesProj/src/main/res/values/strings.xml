@@ -34,8 +34,8 @@
     <!--code enter view-->
     <string name="YourCode">Phone verification</string>
     <string name="SentSmsCode">We’ve sent an SMS with an activation code to your phone **%1$s**.</string>
-    <string name="SentAppCode">We\'ve sent the code to the **Telegram** app on your other device.</string>
-    <string name="SentAppCodeWithPhone">We\'ve sent the code to the **Telegram** app for %1$s on your other device.</string>
+    <string name="SentAppCode">We\'ve sent the code to the **AmberGram** app on your other device.</string>
+    <string name="SentAppCodeWithPhone">We\'ve sent the code to the **AmberGram** app for %1$s on your other device.</string>
     <string name="SentAppCodeTitle">Check your Telegram messages</string>
     <string name="SentFragmentCode">Get the code for %1$s in the Anonymous Numbers section on Fragment.</string>
     <string name="SentSmsCodeTitle">Enter code</string>
@@ -173,7 +173,7 @@
     <string name="NoResultFoundFor">No results found for \"%s\".</string>
     <string name="NoResultFoundForTag">No results found for %s</string>
     <string name="NoResultFoundFor2">There were no results for \"%s\".\nTry a new search.</string>
-    <string name="NoChats">Welcome to Telegram</string>
+    <string name="NoChats">Welcome to AmberGram</string>
     <string name="RecentlyViewed">Recently viewed</string>
     <string name="RecentlyViewedHide">HIDE</string>
     <string name="NoChatsHelp">Start messaging by tapping the pencil button in the bottom right corner.</string>
@@ -335,7 +335,7 @@
     <string name="Superscript">Superscript</string>
     <string name="Regular">Regular</string>
     <string name="FormattedDate">Date</string>
-    <string name="ContactsPermissionAlert">**Telegram** needs access to your contacts so that you can connect with your friends across all your devices. Your contacts will be continuously synced with Telegram\'s heavily encrypted cloud servers.</string>
+    <string name="ContactsPermissionAlert">**AmberGram** needs access to your contacts so that you can connect with your friends across all your devices. Your contacts will be continuously synced with Telegram\'s heavily encrypted cloud servers.</string>
     <string name="ContactsPermissionAlertNotNow">Not now</string>
     <string name="ContactsPermissionAlertContinue">Continue</string>
     <string name="NotificationsPermissionAlertTitle">Turn on notifications</string>
@@ -2077,7 +2077,7 @@
     <string name="UsernameInvalidShortPurchase">A username must have at least 5 characters.\nHowever, it is currently available for purchase. **Learn more…**</string>
     <string name="UsernameInvalidLong">The username must not exceed 32 characters.</string>
     <string name="UsernameInvalidStartNumber">Sorry, a username can\'t start with a number.</string>
-    <string name="UsernameHelp">You can choose a username on **Telegram**. If you do, other people will be able to find you by this username and contact you without knowing your phone number.\n\nYou can use **a–z**, **0–9** and underscores. Minimum length is **5** characters.</string>
+    <string name="UsernameHelp">You can choose a username on **AmberGram**. If you do, other people will be able to find you by this username and contact you without knowing your phone number.\n\nYou can use **a–z**, **0–9** and underscores. Minimum length is **5** characters.</string>
     <string name="UsernameHelpLink">This link opens a chat with you:\n%1$s</string>
     <string name="UsernameChecking">Checking username...</string>
     <string name="UsernameAvailable">%1$s is available.</string>
@@ -2177,7 +2177,7 @@
     <string name="NoReactionsFound">No reactions found</string>
     <string name="NoEffectsFound">No effects found</string>
     <string name="EmojiSuggestions">Emoji suggestions</string>
-    <string name="EmojiSuggestionsInfo">**Telegram** lets you find emoji by thousands of keywords, but there is always something missing. If you want to suggest a new emoji replacement, you can help us by visiting:</string>
+    <string name="EmojiSuggestionsInfo">**AmberGram** lets you find emoji by thousands of keywords, but there is always something missing. If you want to suggest a new emoji replacement, you can help us by visiting:</string>
     <string name="EmojiSuggestionsUrl">https://translations.telegram.org/%1$s/emoji</string>
     <string name="Masks">Masks</string>
     <string name="MasksInfo">You can add masks to photos you send. To do this, open the photo editor before sending a photo.</string>
@@ -2485,7 +2485,7 @@
     <string name="AskButton">Ask a volunteer</string>
     <string name="TelegramFAQ">Telegram FAQ</string>
     <string name="TelegramFaq">Telegram FAQ</string>
-    <string name="TelegramFeatures">Telegram Features</string>
+    <string name="TelegramFeatures">AmberGram Features</string>
     <string name="TelegramFeaturesUrl">https://t.me/TelegramTips</string>
     <string name="AddAccount">Add Account</string>
     <string name="SwitchAccountHint">"Long tap to switch accounts"</string>
@@ -2767,7 +2767,7 @@
     <string name="AuthAnotherClientInfo2">Run Telegram Desktop to get the QR code.</string>
     <string name="AuthAnotherClientInfo3">Scan the QR code to connect your account.</string>
     <string name="AuthAnotherClientUrl">This code can be used to allow someone to log in to your Telegram account.\n\nTo confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and scan the code.</string>
-    <string name="QRCodePermissionNoCameraWithHint">**Telegram** needs camera access so that you can scan QR codes. Tap Settings -> Permissions, and turn **Camera** on.</string>
+    <string name="QRCodePermissionNoCameraWithHint">**AmberGram** needs camera access so that you can scan QR codes. Tap Settings -> Permissions, and turn **Camera** on.</string>
     <string name="SetProfilePhoto">Set Profile Photo</string>
     <string name="AppUpdate">Update Telegram</string>
     <string name="AppUpdateBeta">Update Telegram Beta</string>
@@ -4120,20 +4120,20 @@
     <string name="TosUpdateDecline">We\'re very sorry, but this means we must part ways here. Unlike others, we don\'t use your data for ad targeting or other commercial purposes. Telegram only stores the information it needs to function as a feature-rich cloud service. You can adjust how we use your data (e.g., delete synced contacts) in Privacy &amp; Security settings.\n\nBut if you\'re generally not OK with Telegram\'s modest needs, it won\'t be possible for us to provide this service. You can deactivate your account now — or look around some more and deactivate it later if you feel you\'re not happy with the way we use your data.</string>
     <string name="TosDeclineDeleteAccount">Warning, this will irreversibly delete your Telegram account along with all the data you store in the Telegram cloud.\n\nImportant: You can Cancel now and export your data before deleting your account instead of losing it all. (To do this, open the latest version of Telegram Desktop and go to Settings &gt; Export Telegram Data.)</string>
     <!--permissions-->
-    <string name="PermissionStorageWithHint">**Telegram** needs storage access so you can send and save photos, videos, music and other media. Tap Settings -> Permissions, and turn **Files and media** on.</string>
-    <string name="PermissionNoAudioWithHint">**Telegram** needs microphone access so that you can send voice messages. Tap Settings -> Permissions, and turn **Microphone** on.</string>
-    <string name="PermissionNoBluetoothWithHint">**Telegram** needs bluetooth access to record video from your headset microphone. Tap Settings -> Permissions, and turn **Bluetooth** on.</string>
-    <string name="PermissionNoAudioVideoWithHint">**Telegram** needs microphone access so that you can send voice messages. Tap Settings -> Permissions, and turn **Microphone** on. </string>
-    <string name="PermissionNoCameraWithHint">**Telegram** needs camera access so that you can take photos and videos. Tap Settings -> Permissions, and turn **Camera** on.</string>
-    <string name="PermissionNoCameraMicVideo">**Telegram** needs camera and microphone access so that you can send video messages. Tap Settings -> Permissions, and turn **Microphone** and **Camera** on.</string>
+    <string name="PermissionStorageWithHint">**AmberGram** needs storage access so you can send and save photos, videos, music and other media. Tap Settings -> Permissions, and turn **Files and media** on.</string>
+    <string name="PermissionNoAudioWithHint">**AmberGram** needs microphone access so that you can send voice messages. Tap Settings -> Permissions, and turn **Microphone** on.</string>
+    <string name="PermissionNoBluetoothWithHint">**AmberGram** needs bluetooth access to record video from your headset microphone. Tap Settings -> Permissions, and turn **Bluetooth** on.</string>
+    <string name="PermissionNoAudioVideoWithHint">**AmberGram** needs microphone access so that you can send voice messages. Tap Settings -> Permissions, and turn **Microphone** on. </string>
+    <string name="PermissionNoCameraWithHint">**AmberGram** needs camera access so that you can take photos and videos. Tap Settings -> Permissions, and turn **Camera** on.</string>
+    <string name="PermissionNoCameraMicVideo">**AmberGram** needs camera and microphone access so that you can send video messages. Tap Settings -> Permissions, and turn **Microphone** and **Camera** on.</string>
     <string name="PermissionNoLocation">Telegram needs access to your location so that you can share it with your friends.</string>
     <string name="PermissionNoLocationStory">Telegram needs access to your location so that you can add your current weather widget to a story.</string>
-    <string name="PermissionNoLocationFriends">**Telegram** needs access to location so that you can share it with your friends. Tap Settings -> Permissions, and turn **Location** on.</string>
-    <string name="PermissionNoLocationNavigation">**Telegram** needs access to location so that you can get directions. Tap Settings -> Permissions, and turn **Location** on.</string>
-    <string name="PermissionNoContactsSharing">**Telegram** needs access to contacts so that you can share them with your friends. Tap Settings -> Permissions, and turn **Contacts** on.</string>
-    <string name="PermissionNoContactsSaving">**Telegram** needs access to contacts to save them on your phone. Tap Settings -> Permissions, and turn **Contacts** on.</string>
-    <string name="PermissionNoStorageAvatar">**Telegram** needs storage access so you can upload profile picture. Tap Settings -> Permissions, and turn **Files and media** on.</string>
-    <string name="PermissionNoAudioStorageStory">**Telegram** needs access to music files to upload with your story. Tap Settings -> Permissions, and turn **Music and Audio** on.</string>
+    <string name="PermissionNoLocationFriends">**AmberGram** needs access to location so that you can share it with your friends. Tap Settings -> Permissions, and turn **Location** on.</string>
+    <string name="PermissionNoLocationNavigation">**AmberGram** needs access to location so that you can get directions. Tap Settings -> Permissions, and turn **Location** on.</string>
+    <string name="PermissionNoContactsSharing">**AmberGram** needs access to contacts so that you can share them with your friends. Tap Settings -> Permissions, and turn **Contacts** on.</string>
+    <string name="PermissionNoContactsSaving">**AmberGram** needs access to contacts to save them on your phone. Tap Settings -> Permissions, and turn **Contacts** on.</string>
+    <string name="PermissionNoStorageAvatar">**AmberGram** needs storage access so you can upload profile picture. Tap Settings -> Permissions, and turn **Files and media** on.</string>
+    <string name="PermissionNoAudioStorageStory">**AmberGram** needs access to music files to upload with your story. Tap Settings -> Permissions, and turn **Music and Audio** on.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram needs access to draw above other apps to play videos in Picture-in-Picture mode.</string>
     <string name="PermissionDrawAboveOtherAppsGroupCall">Overlay mode lets you use push-to-talk and see who is talking even when you are outside of Telegram.</string>
     <string name="PermissionOpenSettings">SETTINGS</string>
@@ -4212,18 +4212,18 @@
     <string name="ViewMessageStatistic">Message Statistic</string>
     <string name="ViewMessage">Open Message</string>
     <!--Intro view-->
-    <string name="Page1Title">Telegram</string>
+    <string name="Page1Title">AmberGram</string>
     <string name="Page2Title">Fast</string>
     <string name="Page3Title">Free</string>
     <string name="Page4Title">Secure</string>
     <string name="Page5Title">Powerful</string>
     <string name="Page6Title">Cloud-Based</string>
     <string name="Page1Message">The world\'s **fastest** messaging app.\nIt is **free** and **secure**.</string>
-    <string name="Page2Message">**Telegram** delivers messages faster than\nany other application.</string>
-    <string name="Page3Message">**Telegram** provides free unlimited cloud storage for chats and media.</string>
-    <string name="Page4Message">**Telegram** keeps your messages safe\nfrom hacker attacks.</string>
-    <string name="Page5Message">**Telegram** has no limits on\nthe size of your media and chats.</string>
-    <string name="Page6Message">**Telegram** lets you access your messages\nfrom multiple devices.</string>
+    <string name="Page2Message">**AmberGram** delivers messages faster than\nany other application.</string>
+    <string name="Page3Message">**AmberGram** provides free unlimited cloud storage for chats and media.</string>
+    <string name="Page4Message">**AmberGram** keeps your messages safe\nfrom hacker attacks.</string>
+    <string name="Page5Message">**AmberGram** has no limits on\nthe size of your media and chats.</string>
+    <string name="Page6Message">**AmberGram** lets you access your messages\nfrom multiple devices.</string>
     <string name="StartMessaging">Start Messaging</string>
     <!-- VoIP -->
     <string name="AccountSettings">Account Settings</string>
@@ -4303,8 +4303,8 @@
     <string name="VoipPeerVideoOutdated">Sorry, **%1$s** is using an old version of Telegram that doesn\'t support video calls.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">Make a voice call</string>
     <string name="VoipRateCallAlert">Please rate the quality of your Telegram call</string>
-    <string name="VoipNeedMicPermissionWithHint">**Telegram** needs microphone access so that you can make calls. Tap Settings -> Permissions, and turn **Microphone** on.</string>
-    <string name="VoipNeedMicCameraPermissionWithHint">**Telegram** needs camera and microphone access so that you can make video calls. Tap Settings -> Permissions, and turn **Microphone** and **Camera** on.</string>
+    <string name="VoipNeedMicPermissionWithHint">**AmberGram** needs microphone access so that you can make calls. Tap Settings -> Permissions, and turn **Microphone** on.</string>
+    <string name="VoipNeedMicCameraPermissionWithHint">**AmberGram** needs camera and microphone access so that you can make video calls. Tap Settings -> Permissions, and turn **Microphone** and **Camera** on.</string>
     <string name="VoipNeedCameraPermission">Telegram needs access to your camera so that you can make video calls.</string>
     <string name="VoipFeedbackCommentHint">Add an optional comment</string>
     <string name="CallBack">Call Back</string>
@@ -5437,7 +5437,7 @@
     <string name="DidNotGetTheCodePhone">Get code on this phone</string>
     <string name="MigrateOldFolderButton">Move Files Now</string>
     <string name="MigrateOldFolderTitle">Migrate Files to Scoped Storage</string>
-    <string name="MigrateOldFolderDescription">Due to a change made by **Google**, we need to move the files you downloaded using **Telegram** to a new folder.\n\nThis may take a few moments. You can continue using the app while the files are moved.</string>
+    <string name="MigrateOldFolderDescription">Due to a change made by **Google**, we need to move the files you downloaded using **AmberGram** to a new folder.\n\nThis may take a few moments. You can continue using the app while the files are moved.</string>
     <string name="MigratingFiles">Migrating files</string>
     <string name="ReactionsCount_one">%1$d reaction</string>
     <string name="ReactionsCount_other">%1$d reactions</string>

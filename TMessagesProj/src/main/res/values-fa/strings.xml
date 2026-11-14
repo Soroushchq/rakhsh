@@ -53,4 +53,15 @@
     <string name="AppIconAmberPhoenixFrame">ققنوس آمبر قاب‌دار</string>
     <string name="AppIconAmberPhoenixHalo">ققنوس آمبر هاله‌دار</string>
     <string name="AppIconAmberPhoenix">ققنوس آمبر</string>
+    <string name="NoChats">به آمبرگرام خوش آمدید</string>
+    <string name="NoChatsHelp">برای شروع پیام‌دادن، روی دکمه مدادی در پایین صفحه بزنید.</string>
+    <string name="NoChatsContactsHelp">برای شروع پیام‌دادن، روی دکمه مدادی در پایین صفحه بزنید.</string>
+    <string name="TelegramFeatures">امکانات آمبرگرام</string>
+    <string name="Page1Title">آمبرگرام</string>
+    <string name="Page1Message">**سریع‌ترین** پیام‌رسان جهان.\n**رایگان** و **امن** است.</string>
+    <string name="Page2Message">**آمبرگرام** پیام‌ها را سریع‌تر از\nهر برنامه دیگری می‌رساند.</string>
+    <string name="Page3Message">**آمبرگرام** فضای ابری نامحدود و رایگان برای گفتگوها و رسانه‌ها فراهم می‌کند.</string>
+    <string name="Page4Message">**آمبرگرام** پیام‌های شما را\nاز حملات هکرها محافظت می‌کند.</string>
+    <string name="Page5Message">**آمبرگرام** هیچ محدودیتی برای\nحجم رسانه‌ها و گفتگوها ندارد.</string>
+    <string name="Page6Message">**آمبرگرام** به شما امکان می‌دهد از\nچند دستگاه به پیام‌هایتان دسترسی داشته باشید.</string>
 </resources>

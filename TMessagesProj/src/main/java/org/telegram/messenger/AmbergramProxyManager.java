@@ -560,8 +560,10 @@ public class AmbergramProxyManager {
             return;
         }
         lastRemovedCount = removed.size();
+        final ArrayList<ProxyItem> removedFinal = removed;
+        final ProxyItem bestFinal = best;
         FileLog.d(TAG + ": auto-removed " + removed.size() + " dead proxies");
-        AndroidUtilities.runOnUIThread(() -> cleanupSharedConfig(removed, best));
+        AndroidUtilities.runOnUIThread(() -> cleanupSharedConfig(removedFinal, bestFinal));
         notifyListeners(EVENT_LIST_CLEANED, lastRemovedCount, 0);
     }
 
